@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ShoesApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +14,7 @@ var connString = builder.Configuration.GetConnectionString("ShoesDb");
 
 builder.Services.AddDbContext<ShoesDbContext>(opt =>
 {
-    opt.UseNpgsql(connString);
+	opt.UseNpgsql(connString);
 });
 
 var app = builder.Build();
@@ -22,8 +22,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
