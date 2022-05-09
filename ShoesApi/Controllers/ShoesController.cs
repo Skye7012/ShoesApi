@@ -51,9 +51,6 @@ namespace ShoesApi.Controllers
 
 			var shoes = await query
 				.Sort(request)
-				//.Skip((request.Page - 1) * request.Limit)
-				//.Take(request.Limit)
-				//.OrderBy(request.OrderBy, request.IsAscending)
 				.ToListAsync();
 
 
@@ -63,7 +60,5 @@ namespace ShoesApi.Controllers
 				TotalCount = count,
 			};
 		}
-
-		
 	}
 }
