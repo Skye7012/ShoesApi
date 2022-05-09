@@ -21,12 +21,14 @@ namespace ShoesApi
         public virtual DbSet<Season> Seasons { get; set; } = null!;
         public virtual DbSet<Shoe> Shoes { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
+        //        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

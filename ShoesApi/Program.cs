@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ShoesApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connString = builder.Configuration.GetConnectionString("ShoesDb");
+
 builder.Services.AddDbContext<ShoesDbContext>(opt =>
-    opt.UseSqlServer)
+{
+    opt.UseNpgsql(connString);
+});
 
 var app = builder.Build();
 
