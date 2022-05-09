@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShoesApi.Responses;
 using ShoesApi.Responses.ShoeResponse;
 
 namespace ShoesApi.Controllers
@@ -17,29 +18,26 @@ namespace ShoesApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<ShoeResponse>> Get()
+        public async Task<GetShoesResponse> Get()
         {
-            return await _context.Shoes
-                //.Include(x => x.Brand)
-                //.Include(x => x.Destination)
-                //.Include(x => x.Season)
-                .Select(x => new ShoeResponse()
+            var shoes = await _context.Shoes
+                .Select(x => new GetShoesResponseItem()
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Image = x.Image,
                     Price = x.Price,
-                    Brand = new ShoeResponseBrand()
+                    Brand = new GetShoesResponseItemBrand()
                     {
                         Id = x.Brand!.Id,
                         Name = x.Brand!.Name,
                     },
-                    Destination = new ShoeResponseDestinaiton()
+                    Destination = new GetShoesResponseItemDestinaiton()
                     {
                         Id = x.Destination!.Id,
                         Name = x.Destination!.Name,
                     },
-                    Season = new ShoeResponseSeason()
+                    Season = new GetShoesResponseItemSeason()
                     {
                         Id = x.Season!.Id,
                         Name = x.Season!.Name,
@@ -47,7 +45,11 @@ namespace ShoesApi.Controllers
                 })
                 .ToListAsync();
 
-            //return shoes;
+            return new GetShoesResponse()
+            {
+                Items = shoes,
+                TotalCount = shoes.Count,
+            };
         }
     }
 }
