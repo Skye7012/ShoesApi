@@ -1,4 +1,4 @@
-﻿namespace ShoesApi.Responses.ShoeResponse
+﻿namespace ShoesApi.Responses.ShoeResponses.GetShoesResponse
 {
 	public class GetShoesResponseItemBrand
 	{

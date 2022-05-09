@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.Responses;
-using ShoesApi.Responses.ShoeResponse;
+using ShoesApi.Extensions;
+using ShoesApi.Requests.ShoeRequests.GetShoesRequest;
+using ShoesApi.Responses.ShoeResponses.GetShoesResponse;
+using System.Linq.Dynamic.Core;
 
 namespace ShoesApi.Controllers
 {
@@ -18,9 +20,10 @@ namespace ShoesApi.Controllers
 		}
 
 		[HttpGet]
-		public async Task<GetShoesResponse> Get()
+		public async Task<GetShoesResponse> Get(
+			[FromQuery] GetShoesRequest request)
 		{
-			var shoes = await _context.Shoes
+			var query = _context.Shoes
 				.Select(x => new GetShoesResponseItem()
 				{
 					Id = x.Id,
@@ -42,14 +45,25 @@ namespace ShoesApi.Controllers
 						Id = x.Season!.Id,
 						Name = x.Season!.Name,
 					},
-				})
+				});
+
+			var count = await query.CountAsync();
+
+			var shoes = await query
+				.Sort(request)
+				//.Skip((request.Page - 1) * request.Limit)
+				//.Take(request.Limit)
+				//.OrderBy(request.OrderBy, request.IsAscending)
 				.ToListAsync();
+
 
 			return new GetShoesResponse()
 			{
 				Items = shoes,
-				TotalCount = shoes.Count,
+				TotalCount = count,
 			};
 		}
+
+		
 	}
 }
