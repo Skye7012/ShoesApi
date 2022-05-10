@@ -53,6 +53,12 @@ namespace ShoesApi.Controllers
 					.Where(x => x.Name.ToLower().Contains(request.SearchQuery.ToLower()));
 			}
 
+			if(request.BrandFilters != null)
+			{
+				query = query
+					.Where(x => request.BrandFilters.Contains(x.Brand.Id));
+			}
+
 			var count = await query.CountAsync();
 
 			var shoes = await query
