@@ -21,9 +21,7 @@ namespace ShoesApi.Entities
 		{
 			builder.HasKey(e => e.Id);
 
-			builder.Property(e => e.Id)
-				.HasDefaultValueSql("nextval('\"Brand_id_seq\"'::regclass)");
-			//.HasColumnType("serial");
+			builder.Property(e => e.Id);
 		}
 
 		public abstract void ConfigureChild(EntityTypeBuilder<TEntity> builder);

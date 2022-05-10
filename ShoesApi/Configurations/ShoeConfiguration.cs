@@ -25,10 +25,6 @@ namespace ShoesApi.Entities
 			builder.HasIndex(e => e.Image)
 				.IsUnique();
 
-			//builder.Property(e => e.BrandId).HasColumnName("brand_id");
-			//builder.Property(e => e.DestinationId).HasColumnName("destination_id");
-			//builder.Property(e => e.SeasonId).HasColumnName("season_id");
-
 			builder.HasOne(d => d.Brand)
 				.WithMany(p => p.Shoes)
 				.HasForeignKey(d => d.BrandId)
