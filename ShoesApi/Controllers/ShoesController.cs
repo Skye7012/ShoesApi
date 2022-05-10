@@ -47,6 +47,12 @@ namespace ShoesApi.Controllers
 					},
 				});
 
+			if(request.SearchQuery != null)
+			{
+				query = query
+					.Where(x => x.Name.ToLower().Contains(request.SearchQuery.ToLower()));
+			}
+
 			var count = await query.CountAsync();
 
 			var shoes = await query

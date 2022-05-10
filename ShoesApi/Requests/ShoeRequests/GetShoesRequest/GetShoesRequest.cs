@@ -2,5 +2,6 @@
 {
 	public class GetShoesRequest : GetRequest
 	{
+		public string? SearchQuery { get; set; }
 	}
 }
