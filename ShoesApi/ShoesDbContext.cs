@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ShoesApi.Entities;
 
 namespace ShoesApi
 {
@@ -21,32 +22,25 @@ namespace ShoesApi
 		public virtual DbSet<Season> Seasons { get; set; } = null!;
 		public virtual DbSet<Shoe> Shoes { get; set; } = null!;
 
-		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		//{
-		//    if (!optionsBuilder.IsConfigured)
-		//    {
-		//        optionsBuilder.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
-		//        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-		//    }
-		//}
-
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Brand>(entity =>
-			{
-				entity.ToTable("brands");
+			modelBuilder.ApplyConfiguration(new BrandConfiguration());
 
-				entity.HasComment("Брэнды");
+			//modelBuilder.Entity<Brand>(entity =>
+			//{
+			//	entity.ToTable("brands");
 
-				entity.HasIndex(e => e.Name, "Brand_name_key")
-					.IsUnique();
+			//	entity.HasComment("Брэнды");
 
-				entity.Property(e => e.Id)
-					.HasColumnName("id")
-					.HasDefaultValueSql("nextval('\"Brand_id_seq\"'::regclass)");
+			//	entity.HasIndex(e => e.Name, "Brand_name_key")
+			//		.IsUnique();
 
-				entity.Property(e => e.Name).HasColumnName("name");
-			});
+			//	entity.Property(e => e.Id)
+			//		.HasColumnName("id")
+			//		.HasDefaultValueSql("nextval('\"Brand_id_seq\"'::regclass)");
+
+			//	entity.Property(e => e.Name).HasColumnName("name");
+			//});
 
 			modelBuilder.Entity<Destination>(entity =>
 			{

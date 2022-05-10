@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ShoesApi
+namespace ShoesApi.Entities
 {
 	/// <summary>
 	/// Сезон

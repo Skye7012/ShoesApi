@@ -17,6 +17,7 @@ var connString = builder.Configuration.GetConnectionString("ShoesDb");
 builder.Services.AddDbContext<ShoesDbContext>(opt =>
 {
 	opt.UseNpgsql(connString);
+	opt.UseSnakeCaseNamingConvention();
 });
 
 var app = builder.Build();
