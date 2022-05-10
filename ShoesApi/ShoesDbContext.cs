@@ -6,7 +6,7 @@ using ShoesApi.Entities;
 
 namespace ShoesApi
 {
-	public partial class ShoesDbContext : DbContext
+	public class ShoesDbContext : DbContext
 	{
 		public ShoesDbContext()
 		{
@@ -115,10 +115,6 @@ namespace ShoesApi
 					.HasForeignKey(d => d.SeasonId)
 					.HasConstraintName("shoes_season_id_fkey");
 			});
-
-			OnModelCreatingPartial(modelBuilder);
 		}
-
-		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 	}
 }

@@ -6,7 +6,7 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Назначение обуви
 	/// </summary>
-	public partial class Destination
+	public class Destination
 	{
 		public Destination()
 		{

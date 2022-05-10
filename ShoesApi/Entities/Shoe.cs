@@ -6,7 +6,7 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Обувь
 	/// </summary>
-	public partial class Shoe
+	public class Shoe
 	{
 		public int Id { get; set; }
 		public string Name { get; set; } = null!;

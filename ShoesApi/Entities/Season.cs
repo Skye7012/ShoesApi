@@ -6,7 +6,7 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Сезон
 	/// </summary>
-	public partial class Season
+	public class Season
 	{
 		public Season()
 		{

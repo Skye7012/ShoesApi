@@ -6,14 +6,13 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Брэнды
 	/// </summary>
-	public partial class Brand
+	public class Brand : EntityBase
 	{
 		public Brand()
 		{
 			Shoes = new HashSet<Shoe>();
 		}
 
-		public int Id { get; set; }
 		public string Name { get; set; } = null!;
 
 		public virtual ICollection<Shoe> Shoes { get; set; }
