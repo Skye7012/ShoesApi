@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="Brand"/>
+	/// Конфигурация для <see cref="Destination"/>
 	/// </summary>
-	public class BrandConfiguration : EntityBaseConfiguration<Brand>
+	public class DestinationConfiguration : EntityBaseConfiguration<Destination>
 	{
-		public override void ConfigureChild(EntityTypeBuilder<Brand> builder)
+		public override void ConfigureChild(EntityTypeBuilder<Destination> builder)
 		{
-			builder.HasComment("Брэнды");
+			builder.HasComment("Назначение обуви");
 
 			builder.Property(e => e.Name);
 
@@ -20,8 +20,8 @@ namespace ShoesApi.Entities
 				.IsUnique();
 
 			builder.HasMany(d => d.Shoes)
-				.WithOne(p => p.Brand)
-				.HasForeignKey(d => d.BrandId)
+				.WithOne(p => p.Destination)
+				.HasForeignKey(d => d.DestinationId)
 				.HasPrincipalKey(p => p.Id);
 		}
 	}

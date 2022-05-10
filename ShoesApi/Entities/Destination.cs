@@ -6,16 +6,15 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Назначение обуви
 	/// </summary>
-	public class Destination
+	public class Destination : EntityBase
 	{
-		public Destination()
-		{
-			Shoes = new HashSet<Shoe>();
-		}
-
-		public int Id { get; set; }
 		public string Name { get; set; } = null!;
 
-		public virtual ICollection<Shoe> Shoes { get; set; }
+
+		#region navigation Properties
+
+		public List<Shoe>? Shoes { get; set; }
+
+		#endregion
 	}
 }

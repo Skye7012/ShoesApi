@@ -6,24 +6,30 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Обувь
 	/// </summary>
-	public class Shoe
+	public class Shoe : EntityBase
 	{
-		public int Id { get; set; }
 		public string Name { get; set; } = null!;
-		public int? BrandId { get; set; }
-		public int? DestinationId { get; set; }
-		public int? SeasonId { get; set; }
+
 		/// <summary>
 		/// Название изображения (для пути)
 		/// </summary>
 		public string Image { get; set; } = null!;
+
 		/// <summary>
 		/// Цена
 		/// </summary>
 		public int? Price { get; set; }
 
+		public int? BrandId { get; set; }
+		public int? DestinationId { get; set; }
+		public int? SeasonId { get; set; }
+
+		#region navigation Properties
+
 		public virtual Brand? Brand { get; set; }
 		public virtual Destination? Destination { get; set; }
 		public virtual Season? Season { get; set; }
+
+		#endregion
 	}
 }

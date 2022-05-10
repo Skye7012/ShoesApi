@@ -8,13 +8,13 @@ namespace ShoesApi.Entities
 	/// </summary>
 	public class Brand : EntityBase
 	{
-		public Brand()
-		{
-			Shoes = new HashSet<Shoe>();
-		}
-
 		public string Name { get; set; } = null!;
 
-		public virtual ICollection<Shoe> Shoes { get; set; }
+
+		#region navigation Properties
+
+		public List<Shoe>? Shoes { get; set; }
+
+		#endregion
 	}
 }
