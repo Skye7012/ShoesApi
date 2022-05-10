@@ -59,6 +59,18 @@ namespace ShoesApi.Controllers
 					.Where(x => request.BrandFilters.Contains(x.Brand.Id));
 			}
 
+			if (request.DestinationFilters != null)
+			{
+				query = query
+					.Where(x => request.DestinationFilters.Contains(x.Destination.Id));
+			}
+
+			if (request.SeasonFilters != null)
+			{
+				query = query
+					.Where(x => request.SeasonFilters.Contains(x.Season.Id));
+			}
+
 			var count = await query.CountAsync();
 
 			var shoes = await query
