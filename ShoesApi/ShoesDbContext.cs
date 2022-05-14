@@ -21,6 +21,7 @@ namespace ShoesApi
 		public virtual DbSet<Destination> Destinations { get; set; } = null!;
 		public virtual DbSet<Season> Seasons { get; set; } = null!;
 		public virtual DbSet<Shoe> Shoes { get; set; } = null!;
+		public virtual DbSet<User> Users { get; set; } = null!;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -28,6 +29,7 @@ namespace ShoesApi
 			modelBuilder.ApplyConfiguration(new DestinationConfiguration());
 			modelBuilder.ApplyConfiguration(new SeasonConfiguration());
 			modelBuilder.ApplyConfiguration(new ShoeConfiguration());
+			modelBuilder.ApplyConfiguration(new UserConfiguration());
 		}
 	}
 }
