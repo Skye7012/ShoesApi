@@ -15,7 +15,8 @@ namespace ShoesApi.Entities
 			builder.HasComment("Пользователи");
 
 			builder.Property(e => e.Login);
-			builder.Property(e => e.Password);
+			builder.Property(e => e.PasswordHash);
+			builder.Property(e => e.PasswordSalt);
 
 			builder.HasIndex(e => e.Login)
 				.IsUnique();

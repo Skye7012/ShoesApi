@@ -10,7 +10,8 @@ namespace ShoesApi.Entities
 	{
 		public string Login { get; set; } = null!;
 
-		public string Password { get; set; } = null!;
+		public byte[] PasswordHash { get; set; } = null!;
+		public byte[] PasswordSalt { get; set; } = null!;
 
 	}
 }
