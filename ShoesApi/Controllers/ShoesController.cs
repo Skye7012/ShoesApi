@@ -45,6 +45,7 @@ namespace ShoesApi.Controllers
 						Id = x.Season!.Id,
 						Name = x.Season!.Name,
 					},
+					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
 				});
 
 			if(request.SearchQuery != null)
@@ -110,6 +111,7 @@ namespace ShoesApi.Controllers
 						Id = x.Season!.Id,
 						Name = x.Season!.Name,
 					},
+					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
 				});
 
 			query = query

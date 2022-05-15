@@ -39,6 +39,10 @@ namespace ShoesApi.Entities
 				.WithMany(p => p.Shoes)
 				.HasForeignKey(d => d.SeasonId)
 				.HasPrincipalKey(p => p.Id);
+
+			builder.HasMany(d => d.Sizes)
+				.WithMany(p => p.Shoes)
+				.UsingEntity(e => e.ToTable("shoes_sizes"));
 		}
 	}
 }

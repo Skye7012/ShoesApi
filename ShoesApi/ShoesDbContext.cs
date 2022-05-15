@@ -22,6 +22,7 @@ namespace ShoesApi
 		public virtual DbSet<Season> Seasons { get; set; } = null!;
 		public virtual DbSet<Shoe> Shoes { get; set; } = null!;
 		public virtual DbSet<User> Users { get; set; } = null!;
+		public virtual DbSet<Size> Sizes { get; set; } = null!;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

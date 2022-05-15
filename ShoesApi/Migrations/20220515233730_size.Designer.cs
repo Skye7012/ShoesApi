@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShoesApi;
@@ -11,9 +12,10 @@ using ShoesApi;
 namespace ShoesApi.Migrations
 {
     [DbContext(typeof(ShoesDbContext))]
-    partial class ShoesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220515233730_size")]
+    partial class size
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,9 +178,9 @@ namespace ShoesApi.Migrations
                         .HasColumnName("ru_size");
 
                     b.HasKey("Id")
-                        .HasName("pk_sizes");
+                        .HasName("pk_size");
 
-                    b.ToTable("sizes", (string)null);
+                    b.ToTable("size", (string)null);
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.User", b =>
@@ -274,7 +276,7 @@ namespace ShoesApi.Migrations
                         .HasForeignKey("SizesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_shoes_sizes_sizes_sizes_id");
+                        .HasConstraintName("fk_shoes_sizes_size_sizes_id");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Brand", b =>

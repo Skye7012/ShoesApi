@@ -10,5 +10,7 @@
 		public GetShoesResponseItemBrand Brand { get; set; }
 		public GetShoesResponseItemDestinaiton Destination { get; set; }
 		public GetShoesResponseItemSeason Season { get; set; }
+
+		public List<int> RuSizes { get; set; }
 	}
 }
