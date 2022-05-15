@@ -56,7 +56,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(
-	options => options.AllowAnyOrigin().AllowAnyMethod()
+	options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
 );
 
 app.UseHttpsRedirection();

@@ -84,5 +84,48 @@ namespace ShoesApi.Controllers
 				TotalCount = count,
 			};
 		}
+
+		[HttpGet("GetByIds")]
+		public async Task<GetShoesResponse> GetByIds([FromQuery] int[] ids)
+		{
+			var query = _context.Shoes
+				.Select(x => new GetShoesResponseItem()
+				{
+					Id = x.Id,
+					Name = x.Name,
+					Image = x.Image,
+					Price = x.Price,
+					Brand = new GetShoesResponseItemBrand()
+					{
+						Id = x.Brand!.Id,
+						Name = x.Brand!.Name,
+					},
+					Destination = new GetShoesResponseItemDestinaiton()
+					{
+						Id = x.Destination!.Id,
+						Name = x.Destination!.Name,
+					},
+					Season = new GetShoesResponseItemSeason()
+					{
+						Id = x.Season!.Id,
+						Name = x.Season!.Name,
+					},
+				});
+
+			query = query
+				.Where(x => ids.Contains(x.Id));
+
+			var count = await query.CountAsync();
+
+			var shoes = await query
+				.ToListAsync();
+
+
+			return new GetShoesResponse()
+			{
+				Items = shoes,
+				TotalCount = count,
+			};
+		}
 	}
 }
