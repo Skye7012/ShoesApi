@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ShoesApi.Entities;
-using ShoesApi.Extensions;
 using ShoesApi.Requests.UserRequests;
-using ShoesApi.Responses.BrandResponses.GetBrandsResponse;
 using ShoesApi.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
@@ -34,9 +32,20 @@ namespace ShoesApi.Controllers
 
 		[HttpGet]
 		[Authorize]
-		public ActionResult<string> Get()
+		public async Task<UserGetResponse> Get()
 		{
-			return Ok("Authirized");
+			var login = _userService.GetLogin();
+			var user = await _context.Users
+				.FirstOrDefaultAsync(x => x.Login == login)
+				?? throw new Exception("User not found");
+
+			return new UserGetResponse()
+			{
+				Login = login,
+				Name = user.Name,
+				Fname = user.Fname,
+				Phone = user.Phone,
+			};
 		}
 
 		[HttpPost("register")]
