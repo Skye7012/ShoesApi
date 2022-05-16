@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShoesApi;
+using ShoesApi.Services;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,9 @@ builder.Services.AddDbContext<ShoesDbContext>(opt =>
 	opt.UseNpgsql(connString);
 	opt.UseSnakeCaseNamingConvention();
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

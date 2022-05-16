@@ -18,7 +18,7 @@ namespace ShoesApi.Entities
 		/// <summary>
 		/// Цена
 		/// </summary>
-		public int? Price { get; set; }
+		public int Price { get; set; }
 
 		public int? BrandId { get; set; }
 		public int? DestinationId { get; set; }

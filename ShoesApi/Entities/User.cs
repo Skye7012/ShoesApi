@@ -13,5 +13,11 @@ namespace ShoesApi.Entities
 		public byte[] PasswordHash { get; set; } = null!;
 		public byte[] PasswordSalt { get; set; } = null!;
 
+		public string Name { get; set; } = null!;
+
+		public string? Fname { get; set; }
+
+		public string? Phone { get; set; }
+
 	}
 }

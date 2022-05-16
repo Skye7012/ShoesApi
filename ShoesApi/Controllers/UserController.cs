@@ -6,6 +6,7 @@ using ShoesApi.Entities;
 using ShoesApi.Extensions;
 using ShoesApi.Requests.UserRequests;
 using ShoesApi.Responses.BrandResponses.GetBrandsResponse;
+using ShoesApi.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
@@ -19,13 +20,16 @@ namespace ShoesApi.Controllers
 	{
 		private readonly ShoesDbContext _context;
 		private readonly IConfiguration _configuration;
+		private readonly IUserService _userService;
 
 		public UserController(
 			ShoesDbContext context,
-			IConfiguration configuration)
+			IConfiguration configuration,
+			IUserService userService)
 		{
 			_context = context;
 			_configuration = configuration;
+			_userService = userService;
 		}
 
 		[HttpGet]
@@ -38,12 +42,19 @@ namespace ShoesApi.Controllers
 		[HttpPost("register")]
 		public async Task<ActionResult<User>> Register(RegisterRequest request)
 		{
+			var isLoginUnique = _context.Users.All(x => x.Login != request.Login);
+			if (!isLoginUnique)
+				throw new Exception("User with such login already existis");
+
 			CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 			var user = new User();
 
 			user.Login = request.Login;
 			user.PasswordHash = passwordHash;
 			user.PasswordSalt = passwordSalt;
+			user.Name = request.Name;
+			user.Fname = request.Fname;
+			user.Phone = request.Phone;
 
 			await _context.AddAsync(user);
 			await _context.SaveChangesAsync();
@@ -67,6 +78,40 @@ namespace ShoesApi.Controllers
 
 			return Ok(token);
 		}
+
+		[HttpPut]
+		[Authorize]
+		public async Task Put(UserPutRequest request)
+		{
+			var login = _userService.GetLogin();
+			var user = await _context.Users
+				.FirstOrDefaultAsync(x => x.Login == login)
+				?? throw new Exception("User not found");
+
+			if (request.Name != null)
+				user.Name = request.Name;
+			if (request.Fname != null)
+				user.Fname = request.Fname;
+			if (request.Phone != null)
+				user.Phone = request.Phone;
+
+			await _context.SaveChangesAsync();
+		}
+
+		[HttpDelete]
+		[Authorize]
+		public async Task Delete()
+		{
+			var login = _userService.GetLogin();
+			var user = await _context.Users
+				.FirstOrDefaultAsync(x => x.Login == login)
+				?? throw new Exception("User not found");
+
+			_context.Users.Remove(user);
+			await _context.SaveChangesAsync();
+		}
+
+		#region token and pass
 
 		private string CreateToken(User user)
 		{
@@ -107,5 +152,7 @@ namespace ShoesApi.Controllers
 				return computedHash.SequenceEqual(passwordHash);
 			}
 		}
+
+		#endregion
 	}
 }

@@ -17,6 +17,9 @@ namespace ShoesApi.Entities
 			builder.Property(e => e.Login);
 			builder.Property(e => e.PasswordHash);
 			builder.Property(e => e.PasswordSalt);
+			builder.Property(e => e.Name);
+			builder.Property(e => e.Fname);
+			builder.Property(e => e.Phone);
 
 			builder.HasIndex(e => e.Login)
 				.IsUnique();
