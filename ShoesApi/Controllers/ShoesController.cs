@@ -72,6 +72,13 @@ namespace ShoesApi.Controllers
 					.Where(x => request.SeasonFilters.Contains(x.Season.Id));
 			}
 
+			if (request.SizeFilters != null)
+			{
+				query = query
+					.Where(x => x.RuSizes
+						.Any(y => request.SizeFilters.Contains(y)));
+			}
+
 			var count = await query.CountAsync();
 
 			var shoes = await query
