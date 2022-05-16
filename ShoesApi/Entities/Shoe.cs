@@ -32,7 +32,7 @@ namespace ShoesApi.Entities
 		public virtual List<Size>? Sizes { get; set; }
 		public virtual List<Order>? Orders { get; set; }
 
-		public List<OrderShoe>? OrderShoes { get; set; }
+		public List<OrderItem>? OrderItems { get; set; }
 
 		#endregion
 	}

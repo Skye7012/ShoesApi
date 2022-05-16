@@ -18,7 +18,7 @@ namespace ShoesApi.Entities
 		#region navigation Properties
 
 		public List<Shoe>? Shoes { get; set; }
-		public List<OrderShoe>? OrderShoes { get; set; }
+		public List<OrderItem>? OrderItems { get; set; }
 
 		#endregion
 	}

@@ -24,6 +24,7 @@ namespace ShoesApi
 		public virtual DbSet<User> Users { get; set; } = null!;
 		public virtual DbSet<Size> Sizes { get; set; } = null!;
 		public virtual DbSet<Order> Orders { get; set; } = null!;
+		public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -34,6 +35,7 @@ namespace ShoesApi
 			modelBuilder.ApplyConfiguration(new UserConfiguration());
 			modelBuilder.ApplyConfiguration(new SizeConfiguration());
 			modelBuilder.ApplyConfiguration(new OrderConfiguration());
+			modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
 		}
 	}
 }

@@ -22,7 +22,8 @@ namespace ShoesApi.Entities
 			builder.HasMany(d => d.Shoes)
 				.WithOne(p => p.Destination)
 				.HasForeignKey(d => d.DestinationId)
-				.HasPrincipalKey(p => p.Id);
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 		}
 	}
 }

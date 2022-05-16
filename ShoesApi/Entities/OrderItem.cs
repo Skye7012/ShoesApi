@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Обувь из заказа
+	/// Часть заказа
 	/// </summary>
-	public class OrderShoe
+	public class OrderItem
 	{
 		public int OrderId { get; set; }
 		public int ShoeId { get; set; }

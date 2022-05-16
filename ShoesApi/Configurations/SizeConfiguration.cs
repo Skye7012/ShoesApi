@@ -22,6 +22,13 @@ namespace ShoesApi.Entities
 			builder.HasMany(d => d.Shoes)
 				.WithMany(p => p.Sizes)
 				.UsingEntity(e => e.ToTable("shoes_sizes"));
+
+			builder
+				.HasMany(t => t.OrderItems)
+				.WithOne(pt => pt.Size)
+				.HasForeignKey(pt => pt.SizeId)
+				.HasPrincipalKey(t => t.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 		}
 	}
 }

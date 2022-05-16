@@ -28,21 +28,31 @@ namespace ShoesApi.Entities
 			builder.HasOne(d => d.Brand)
 				.WithMany(p => p.Shoes)
 				.HasForeignKey(d => d.BrandId)
-				.HasPrincipalKey(p => p.Id);
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 
 			builder.HasOne(d => d.Destination)
 				.WithMany(p => p.Shoes)
 				.HasForeignKey(d => d.DestinationId)
-				.HasPrincipalKey(p => p.Id);
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 
 			builder.HasOne(d => d.Season)
 				.WithMany(p => p.Shoes)
 				.HasForeignKey(d => d.SeasonId)
-				.HasPrincipalKey(p => p.Id);
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 
 			builder.HasMany(d => d.Sizes)
 				.WithMany(p => p.Shoes)
 				.UsingEntity(e => e.ToTable("shoes_sizes"));
+
+			builder
+				.HasMany(t => t.OrderItems)
+				.WithOne(pt => pt.Shoe)
+				.HasForeignKey(pt => pt.ShoeId)
+				.HasPrincipalKey(t => t.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 		}
 	}
 }
