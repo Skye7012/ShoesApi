@@ -30,6 +30,9 @@ namespace ShoesApi.Entities
 		public virtual Destination? Destination { get; set; }
 		public virtual Season? Season { get; set; }
 		public virtual List<Size>? Sizes { get; set; }
+		public virtual List<Order>? Orders { get; set; }
+
+		public List<OrderShoe>? OrderShoes { get; set; }
 
 		#endregion
 	}

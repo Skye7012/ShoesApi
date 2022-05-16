@@ -4,17 +4,20 @@ using System.Collections.Generic;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Размер обувь
+	/// Заказ
 	/// </summary>
-	public class Size : EntityBase
+	public class Order : EntityBase
 	{
-		public int RuSize { get; set; }
+		public DateTime OrderDate { get; set; }
+
+		public int Sum { get; set; }
+
+		public int Count { get; set; }
 
 
 		#region navigation Properties
 
 		public List<Shoe>? Shoes { get; set; }
-
 		public List<OrderShoe>? OrderShoes { get; set; }
 
 		#endregion
