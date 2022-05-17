@@ -12,8 +12,8 @@ using ShoesApi;
 namespace ShoesApi.Migrations
 {
     [DbContext(typeof(ShoesDbContext))]
-    [Migration("20220516072510_Order")]
-    partial class Order
+    [Migration("20220516233708__orderUser")]
+    partial class _orderUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,25 @@ namespace ShoesApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("OrderShoe", b =>
+                {
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("integer")
+                        .HasColumnName("orders_id");
+
+                    b.Property<int>("ShoesId")
+                        .HasColumnType("integer")
+                        .HasColumnName("shoes_id");
+
+                    b.HasKey("OrdersId", "ShoesId")
+                        .HasName("pk_order_shoe");
+
+                    b.HasIndex("ShoesId")
+                        .HasDatabaseName("ix_order_shoe_shoes_id");
+
+                    b.ToTable("order_shoe", (string)null);
+                });
 
             modelBuilder.Entity("ShoesApi.Entities.Brand", b =>
                 {
@@ -89,23 +108,30 @@ namespace ShoesApi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("count");
 
-                    b.Property<DateTime>("OderDate")
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("oder_date");
+                        .HasColumnName("order_date");
 
                     b.Property<int>("Sum")
                         .HasColumnType("integer")
                         .HasColumnName("sum");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_orders");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_orders_user_id");
 
                     b.ToTable("orders", (string)null);
 
                     b.HasComment("Заказ");
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.OrderShoe", b =>
+            modelBuilder.Entity("ShoesApi.Entities.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,18 +153,21 @@ namespace ShoesApi.Migrations
                         .HasColumnName("size_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_order_shoe");
-
-                    b.HasIndex("OrderId")
-                        .HasDatabaseName("ix_order_shoe_order_id");
+                        .HasName("pk_order_items");
 
                     b.HasIndex("ShoeId")
-                        .HasDatabaseName("ix_order_shoe_shoe_id");
+                        .HasDatabaseName("ix_order_items_shoe_id");
 
                     b.HasIndex("SizeId")
-                        .HasDatabaseName("ix_order_shoe_size_id");
+                        .HasDatabaseName("ix_order_items_size_id");
 
-                    b.ToTable("order_shoe", (string)null);
+                    b.HasIndex("OrderId", "ShoeId", "SizeId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_order_items_order_id_shoe_id_size_id");
+
+                    b.ToTable("order_items", (string)null);
+
+                    b.HasComment("Часть заказа");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Season", b =>
@@ -322,28 +351,57 @@ namespace ShoesApi.Migrations
                     b.ToTable("shoes_sizes", (string)null);
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.OrderShoe", b =>
+            modelBuilder.Entity("OrderShoe", b =>
+                {
+                    b.HasOne("ShoesApi.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_shoe_orders_orders_id");
+
+                    b.HasOne("ShoesApi.Entities.Shoe", null)
+                        .WithMany()
+                        .HasForeignKey("ShoesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_shoe_shoes_shoes_id");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.Order", b =>
+                {
+                    b.HasOne("ShoesApi.Entities.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_orders_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.OrderItem", b =>
                 {
                     b.HasOne("ShoesApi.Entities.Order", "Order")
-                        .WithMany("OrderShoes")
+                        .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_shoe_orders_order_id");
+                        .HasConstraintName("fk_order_items_orders_order_id");
 
                     b.HasOne("ShoesApi.Entities.Shoe", "Shoe")
-                        .WithMany("OrderShoes")
+                        .WithMany("OrderItems")
                         .HasForeignKey("ShoeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_shoe_shoes_shoe_id");
+                        .HasConstraintName("fk_order_items_shoes_shoe_id");
 
                     b.HasOne("ShoesApi.Entities.Size", "Size")
-                        .WithMany("OrderShoes")
+                        .WithMany("OrderItems")
                         .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired()
-                        .HasConstraintName("fk_order_shoe_sizes_size_id");
+                        .HasConstraintName("fk_order_items_sizes_size_id");
 
                     b.Navigation("Order");
 
@@ -357,16 +415,19 @@ namespace ShoesApi.Migrations
                     b.HasOne("ShoesApi.Entities.Brand", "Brand")
                         .WithMany("Shoes")
                         .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("fk_shoes_brands_brand_id");
 
                     b.HasOne("ShoesApi.Entities.Destination", "Destination")
                         .WithMany("Shoes")
                         .HasForeignKey("DestinationId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("fk_shoes_destinations_destination_id");
 
                     b.HasOne("ShoesApi.Entities.Season", "Season")
                         .WithMany("Shoes")
                         .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("fk_shoes_seasons_season_id");
 
                     b.Navigation("Brand");
@@ -405,7 +466,7 @@ namespace ShoesApi.Migrations
 
             modelBuilder.Entity("ShoesApi.Entities.Order", b =>
                 {
-                    b.Navigation("OrderShoes");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Season", b =>
@@ -415,12 +476,17 @@ namespace ShoesApi.Migrations
 
             modelBuilder.Entity("ShoesApi.Entities.Shoe", b =>
                 {
-                    b.Navigation("OrderShoes");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Size", b =>
                 {
-                    b.Navigation("OrderShoes");
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

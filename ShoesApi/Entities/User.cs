@@ -19,5 +19,11 @@ namespace ShoesApi.Entities
 
 		public string? Phone { get; set; }
 
+		#region navigation Properties
+
+		public List<Order>? Orders { get; set; }
+
+		#endregion
+
 	}
 }

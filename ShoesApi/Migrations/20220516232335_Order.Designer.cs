@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShoesApi;
@@ -11,9 +12,10 @@ using ShoesApi;
 namespace ShoesApi.Migrations
 {
     [DbContext(typeof(ShoesDbContext))]
-    partial class ShoesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220516232335_Order")]
+    partial class Order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,15 +116,8 @@ namespace ShoesApi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sum");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
                     b.HasKey("Id")
                         .HasName("pk_orders");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_orders_user_id");
 
                     b.ToTable("orders", (string)null);
 
@@ -366,18 +361,6 @@ namespace ShoesApi.Migrations
                         .HasConstraintName("fk_order_shoe_shoes_shoes_id");
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.Order", b =>
-                {
-                    b.HasOne("ShoesApi.Entities.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_orders_users_user_id");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ShoesApi.Entities.OrderItem", b =>
                 {
                     b.HasOne("ShoesApi.Entities.Order", "Order")
@@ -480,11 +463,6 @@ namespace ShoesApi.Migrations
             modelBuilder.Entity("ShoesApi.Entities.Size", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("ShoesApi.Entities.User", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,8 +14,12 @@ namespace ShoesApi.Entities
 
 		public int Count { get; set; }
 
+		public int UserId { get; set; }
+
 
 		#region navigation Properties
+
+		public User? User { get; set; }
 
 		public List<Shoe>? Shoes { get; set; }
 		public List<OrderItem>? OrderItems { get; set; }

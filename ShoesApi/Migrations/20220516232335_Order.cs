@@ -20,7 +20,7 @@ namespace ShoesApi.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    oder_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    order_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     sum = table.Column<int>(type: "integer", nullable: false),
                     count = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -31,7 +31,7 @@ namespace ShoesApi.Migrations
                 comment: "Заказ");
 
             migrationBuilder.CreateTable(
-                name: "order_shoe",
+                name: "order_items",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -42,23 +42,45 @@ namespace ShoesApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_order_shoe", x => x.id);
+                    table.PrimaryKey("pk_order_items", x => x.id);
                     table.ForeignKey(
-                        name: "fk_order_shoe_orders_order_id",
+                        name: "fk_order_items_orders_order_id",
                         column: x => x.order_id,
+                        principalTable: "orders",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_order_items_shoes_shoe_id",
+                        column: x => x.shoe_id,
+                        principalTable: "shoes",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "fk_order_items_sizes_size_id",
+                        column: x => x.size_id,
+                        principalTable: "sizes",
+                        principalColumn: "id");
+                },
+                comment: "Часть заказа");
+
+            migrationBuilder.CreateTable(
+                name: "order_shoe",
+                columns: table => new
+                {
+                    orders_id = table.Column<int>(type: "integer", nullable: false),
+                    shoes_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_order_shoe", x => new { x.orders_id, x.shoes_id });
+                    table.ForeignKey(
+                        name: "fk_order_shoe_orders_orders_id",
+                        column: x => x.orders_id,
                         principalTable: "orders",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_order_shoe_shoes_shoe_id",
-                        column: x => x.shoe_id,
+                        name: "fk_order_shoe_shoes_shoes_id",
+                        column: x => x.shoes_id,
                         principalTable: "shoes",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_order_shoe_sizes_size_id",
-                        column: x => x.size_id,
-                        principalTable: "sizes",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -70,23 +92,32 @@ namespace ShoesApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_order_shoe_order_id",
-                table: "order_shoe",
-                column: "order_id");
+                name: "ix_order_items_order_id_shoe_id_size_id",
+                table: "order_items",
+                columns: new[] { "order_id", "shoe_id", "size_id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_order_shoe_shoe_id",
-                table: "order_shoe",
+                name: "ix_order_items_shoe_id",
+                table: "order_items",
                 column: "shoe_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_order_shoe_size_id",
-                table: "order_shoe",
+                name: "ix_order_items_size_id",
+                table: "order_items",
                 column: "size_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_order_shoe_shoes_id",
+                table: "order_shoe",
+                column: "shoes_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "order_items");
+
             migrationBuilder.DropTable(
                 name: "order_shoe");
 

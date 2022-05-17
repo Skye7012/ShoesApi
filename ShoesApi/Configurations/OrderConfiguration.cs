@@ -18,6 +18,12 @@ namespace ShoesApi.Entities
 			builder.Property(e => e.Sum);
 			builder.Property(e => e.Count);
 
+			builder.HasOne(d => d.User)
+				.WithMany(p => p.Orders)
+				.HasForeignKey(d => d.UserId)
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
+
 			builder.HasMany(d => d.OrderItems)
 				.WithOne(p => p.Order)
 				.HasForeignKey(d => d.OrderId)

@@ -6,7 +6,7 @@ namespace ShoesApi.Entities
 	/// <summary>
 	/// Часть заказа
 	/// </summary>
-	public class OrderItem
+	public class OrderItem : EntityBase
 	{
 		public int OrderId { get; set; }
 		public int ShoeId { get; set; }

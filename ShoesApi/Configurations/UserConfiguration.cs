@@ -23,6 +23,12 @@ namespace ShoesApi.Entities
 
 			builder.HasIndex(e => e.Login)
 				.IsUnique();
+
+			builder.HasMany(d => d.Orders)
+				.WithOne(p => p.User)
+				.HasForeignKey(d => d.UserId)
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 		}
 	}
 }
