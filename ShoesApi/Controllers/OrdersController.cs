@@ -11,12 +11,12 @@ namespace ShoesApi.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	public class OrderController : ControllerBase
+	public class OrdersController : ControllerBase
 	{
 		private readonly ShoesDbContext _context;
 		private readonly IUserService _userService;
 
-		public OrderController(
+		public OrdersController(
 			ShoesDbContext context,
 			IUserService userService)
 		{
@@ -39,6 +39,7 @@ namespace ShoesApi.Controllers
 				{
 					Id = x.Id,
 					OrderDate = x.OrderDate,
+					Addres = x.Addres,
 					Sum = x.Sum,
 					Count = x.Count,
 					OrderItems = x.OrderItems!.Select(i => new GetOrdersResponseItemOrderItem()
@@ -99,6 +100,7 @@ namespace ShoesApi.Controllers
 			var order = new Order()
 			{
 				OrderDate = DateTime.UtcNow,
+				Addres = request.Addres,
 				Count = orderItems.Count(),
 				Sum = orderItems.Sum(x => x.Shoe!.Price),
 				User = user,

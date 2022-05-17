@@ -10,6 +10,8 @@ namespace ShoesApi.Entities
 	{
 		public DateTime OrderDate { get; set; }
 
+		public string Addres { get; set; } = default!;
+
 		public int Sum { get; set; }
 
 		public int Count { get; set; }

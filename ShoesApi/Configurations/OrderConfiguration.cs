@@ -17,6 +17,7 @@ namespace ShoesApi.Entities
 			builder.Property(e => e.OrderDate);
 			builder.Property(e => e.Sum);
 			builder.Property(e => e.Count);
+			builder.Property(e => e.Addres);
 
 			builder.HasOne(d => d.User)
 				.WithMany(p => p.Orders)
