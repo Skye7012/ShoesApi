@@ -41,12 +41,17 @@ namespace ShoesApi.Controllers
 					OrderDate = x.OrderDate,
 					Sum = x.Sum,
 					Count = x.Count,
-					OrderItems = x.OrderItems!.Select(i => new GetOrdersResponseItemOrderItems()
+					OrderItems = x.OrderItems!.Select(i => new GetOrdersResponseItemOrderItem()
 						{
 							Id = i.Id,
-							OrderId = i.OrderId,
-							ShoeId = i.ShoeId,
-							SizeId = i.SizeId,
+							RuSize = i.Size!.RuSize,
+							Shoe = new GetOrdersResponseItemShoe()
+							{
+								Id = i.Shoe!.Id,
+								Image = i.Shoe!.Image,
+								Name = i.Shoe!.Name,
+								Price = i.Shoe!.Price,
+							}
 						})
 						.ToList()
 				});

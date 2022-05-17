@@ -9,6 +9,6 @@
 		public int Sum { get; set; }
 
 		public int Count { get; set; }
-		public List<GetOrdersResponseItemOrderItems>? OrderItems { get; set; }
+		public List<GetOrdersResponseItemOrderItem>? OrderItems { get; set; }
 	}
 }
