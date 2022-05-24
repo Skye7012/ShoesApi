@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using ShoesApi.Requests;
+﻿using ShoesApi.Requests;
 using System.Linq.Dynamic.Core;
 
 namespace ShoesApi.Extensions

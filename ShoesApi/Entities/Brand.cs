@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ShoesApi.Entities
+﻿namespace ShoesApi.Entities
 {
 	/// <summary>
 	/// Брэнды

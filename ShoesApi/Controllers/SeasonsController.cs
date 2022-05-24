@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.Extensions;
 using ShoesApi.Responses.SeasonResponses.GetSeasonsResponse;
 using System.Linq.Dynamic.Core;
 
