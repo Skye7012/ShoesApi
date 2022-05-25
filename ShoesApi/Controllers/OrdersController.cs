@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Entities;
-using ShoesApi.Requests.OderdRequests;
+using ShoesApi.Requests.OrderRequests;
 using ShoesApi.Responses.OrderResponses.GetOrdersResponse;
 using ShoesApi.Services;
 using System.Linq.Dynamic.Core;

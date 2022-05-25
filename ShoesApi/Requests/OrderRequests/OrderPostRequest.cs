@@ -1,4 +1,4 @@
-﻿namespace ShoesApi.Requests.OderdRequests
+﻿namespace ShoesApi.Requests.OrderRequests
 {
 	public class OrderPostRequest
 	{
