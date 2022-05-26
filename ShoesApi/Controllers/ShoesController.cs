@@ -48,36 +48,13 @@ namespace ShoesApi.Controllers
 					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
 				});
 
-			if(request.SearchQuery != null)
-			{
-				query = query
-					.Where(x => x.Name.ToLower().Contains(request.SearchQuery.ToLower()));
-			}
-
-			if(request.BrandFilters != null)
-			{
-				query = query
-					.Where(x => request.BrandFilters.Contains(x.Brand.Id));
-			}
-
-			if (request.DestinationFilters != null)
-			{
-				query = query
-					.Where(x => request.DestinationFilters.Contains(x.Destination.Id));
-			}
-
-			if (request.SeasonFilters != null)
-			{
-				query = query
-					.Where(x => request.SeasonFilters.Contains(x.Season.Id));
-			}
-
-			if (request.SizeFilters != null)
-			{
-				query = query
-					.Where(x => x.RuSizes
+			query = query
+					.Where(x => request.SearchQuery == null || x.Name.ToLower().Contains(request.SearchQuery.ToLower()))
+					.Where(x => request.BrandFilters == null || request.BrandFilters.Contains(x.Brand.Id))
+					.Where(x => request.DestinationFilters == null || request.DestinationFilters.Contains(x.Destination.Id))
+					.Where(x => request.SeasonFilters == null || request.SeasonFilters.Contains(x.Season.Id))
+					.Where(x => request.SizeFilters == null || x.RuSizes
 						.Any(y => request.SizeFilters.Contains(y)));
-			}
 
 			var count = await query.CountAsync();
 
