@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="Brand"/>
+	/// Configuration for <see cref="Brand"/>
 	/// </summary>
 	public class BrandConfiguration : EntityBaseConfiguration<Brand>
 	{
+		/// <inheritdoc/>
 		public override void ConfigureChild(EntityTypeBuilder<Brand> builder)
 		{
 			builder.HasComment("Брэнды");

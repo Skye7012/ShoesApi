@@ -1,22 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.Responses.SeasonResponses.GetSeasonsResponse;
+using ShoesApi.Contracts.Requests.SeasonRequests.GetSeasonsRequest;
 using System.Linq.Dynamic.Core;
 
 namespace ShoesApi.Controllers
 {
+	/// <summary>
+	/// Seasons Controller
+	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class SeasonsController : ControllerBase
 	{
 		private readonly ShoesDbContext _context;
 
-
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="context">DbContext</param>
 		public SeasonsController(ShoesDbContext context)
 		{
 			_context = context;
 		}
 
+		/// <summary>
+		/// Get Seasons
+		/// </summary>
+		/// <returns>Seasons</returns>
 		[HttpGet]
 		public async Task<GetSeasonsResponse> Get()
 		{

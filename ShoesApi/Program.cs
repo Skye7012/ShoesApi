@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using ShoesApi;
 using ShoesApi.Services;
@@ -23,6 +25,10 @@ builder.Services.AddSwaggerGen(options => {
 	});
 
 	options.OperationFilter<SecurityRequirementsOperationFilter>();
+	options.SupportNonNullableReferenceTypes();
+
+	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -60,7 +66,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(
-	options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+	options => 
+		options
+			.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader()
+			.WithExposedHeaders(HeaderNames.ContentDisposition)
 );
 
 app.UseHttpsRedirection();

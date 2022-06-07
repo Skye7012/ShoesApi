@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="OrderItem"/>
+	/// Configuration for <see cref="OrderItem"/>
 	/// </summary>
 	public class OrderItemConfiguration : EntityBaseConfiguration<OrderItem>
 	{
+		/// <inheritdoc/>
 		public override void ConfigureChild(EntityTypeBuilder<OrderItem> builder)
 		{
 			builder.HasComment("Часть заказа");

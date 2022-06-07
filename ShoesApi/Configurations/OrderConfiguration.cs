@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="Order"/>
+	/// Configuration for <see cref="Order"/>
 	/// </summary>
 	public class OrderConfiguration : EntityBaseConfiguration<Order>
 	{
+		/// <inheritdoc/>
 		public override void ConfigureChild(EntityTypeBuilder<Order> builder)
 		{
 			builder.HasComment("Заказ");
@@ -15,7 +16,7 @@ namespace ShoesApi.Entities
 			builder.Property(e => e.OrderDate);
 			builder.Property(e => e.Sum);
 			builder.Property(e => e.Count);
-			builder.Property(e => e.Addres);
+			builder.Property(e => e.Address);
 
 			builder.HasOne(d => d.User)
 				.WithMany(p => p.Orders)

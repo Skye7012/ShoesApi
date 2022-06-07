@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="User"/>
+	/// Configuration for <see cref="User"/>
 	/// </summary>
 	public class UserConfiguration : EntityBaseConfiguration<User>
 	{
+		/// <inheritdoc/>
 		public override void ConfigureChild(EntityTypeBuilder<User> builder)
 		{
 			builder.HasComment("Пользователи");
@@ -16,7 +17,7 @@ namespace ShoesApi.Entities
 			builder.Property(e => e.PasswordHash);
 			builder.Property(e => e.PasswordSalt);
 			builder.Property(e => e.Name);
-			builder.Property(e => e.Fname);
+			builder.Property(e => e.FirstName);
 			builder.Property(e => e.Phone);
 
 			builder.HasIndex(e => e.Login)

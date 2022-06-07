@@ -1,10 +1,16 @@
-﻿using ShoesApi.Requests;
+﻿using ShoesApi.Contracts;
 using System.Linq.Dynamic.Core;
 
 namespace ShoesApi.Extensions
 {
+	/// <summary>
+	/// Extensions for <see cref="IQueryable"/>
+	/// </summary>
 	public static class QueryableExtension
 	{
+		/// <summary>
+		/// Make pagination and sorting
+		/// </summary>
 		public static IQueryable<T> Sort<T>(
 			this IQueryable<T> source,
 			GetRequest request)

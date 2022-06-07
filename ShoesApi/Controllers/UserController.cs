@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ShoesApi.Contracts.Requests.UserRequests.SignInRequest;
+using ShoesApi.Contracts.Requests.UserRequests.SignUpRequest;
+using ShoesApi.Contracts.Requests.UserRequests.UserGetRequest;
 using ShoesApi.Entities;
 using ShoesApi.Requests.UserRequests;
 using ShoesApi.Services;
@@ -12,6 +15,9 @@ using System.Security.Cryptography;
 
 namespace ShoesApi.Controllers
 {
+	/// <summary>
+	/// Controller for <see cref="User"/>
+	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class UserController : ControllerBase
@@ -20,6 +26,12 @@ namespace ShoesApi.Controllers
 		private readonly IConfiguration _configuration;
 		private readonly IUserService _userService;
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="context">DbContext</param>
+		/// <param name="configuration">Configuration service</param>
+		/// <param name="userService">User service</param>
 		public UserController(
 			ShoesDbContext context,
 			IConfiguration configuration,
@@ -30,6 +42,10 @@ namespace ShoesApi.Controllers
 			_userService = userService;
 		}
 
+		/// <summary>
+		/// Get User Credentials
+		/// </summary>
+		/// <returns>User Credentials</returns>
 		[HttpGet]
 		[Authorize]
 		public async Task<UserGetResponse> Get()
@@ -43,17 +59,22 @@ namespace ShoesApi.Controllers
 			{
 				Login = login,
 				Name = user.Name,
-				Fname = user.Fname,
+				FirstName = user.FirstName,
 				Phone = user.Phone,
 			};
 		}
 
-		[HttpPost("register")]
-		public async Task<ActionResult<User>> Register(RegisterRequest request)
+		/// <summary>
+		/// SignUp
+		/// </summary>
+		/// <param name="request">Request</param>
+		/// <returns>Created userId</returns>
+		[HttpPost("SignUp")]
+		public async Task<SignUpResponse> SignUp(SignUpRequest request)
 		{
 			var isLoginUnique = _context.Users.All(x => x.Login != request.Login);
 			if (!isLoginUnique)
-				throw new Exception("User with such login already existis");
+				throw new Exception("User with such login already exists");
 
 			CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 			var user = new User();
@@ -62,17 +83,25 @@ namespace ShoesApi.Controllers
 			user.PasswordHash = passwordHash;
 			user.PasswordSalt = passwordSalt;
 			user.Name = request.Name;
-			user.Fname = request.Fname;
+			user.FirstName = request.FirstName;
 			user.Phone = request.Phone;
 
 			await _context.AddAsync(user);
 			await _context.SaveChangesAsync();
 
-			return Ok(user.Id);
+			return new SignUpResponse()
+			{
+				UserId = user.Id,
+			};
 		}
 
-		[HttpPost("login")]
-		public async Task<ActionResult<string>> Login(LoginRequest request)
+		/// <summary>
+		/// SignIn
+		/// </summary>
+		/// <param name="request">Request</param>
+		/// <returns>Authorization token</returns>
+		[HttpPost("SignIn")]
+		public async Task<ActionResult<SignInResponse>> SignIn(SignInRequest request)
 		{
 			var user = await _context.Users
 				.FirstOrDefaultAsync(x => x.Login == request.Login)
@@ -85,9 +114,16 @@ namespace ShoesApi.Controllers
 
 			string token = CreateToken(user);
 
-			return Ok(token);
+			return Ok(new SignInResponse()
+			{
+				Token = token,
+			});
 		}
 
+		/// <summary>
+		/// Update User Credentials
+		/// </summary>
+		/// <param name="request">Request</param>
 		[HttpPut]
 		[Authorize]
 		public async Task Put(UserPutRequest request)
@@ -99,14 +135,17 @@ namespace ShoesApi.Controllers
 
 			if (request.Name != null)
 				user.Name = request.Name;
-			if (request.Fname != null)
-				user.Fname = request.Fname;
+			if (request.FirstName != null)
+				user.FirstName = request.FirstName;
 			if (request.Phone != null)
 				user.Phone = request.Phone;
 
 			await _context.SaveChangesAsync();
 		}
 
+		/// <summary>
+		/// Delete User
+		/// </summary>
 		[HttpDelete]
 		[Authorize]
 		public async Task Delete()
@@ -122,6 +161,11 @@ namespace ShoesApi.Controllers
 
 		#region token and pass
 
+		/// <summary>
+		/// CreateToken
+		/// </summary>
+		/// <param name="user">User</param>
+		/// <returns>Authorization token</returns>
 		private string CreateToken(User user)
 		{
 			List<Claim> claims = new List<Claim>

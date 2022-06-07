@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="Size"/>
+	/// Configuration for <see cref="Size"/>
 	/// </summary>
 	public class SizeConfiguration : EntityBaseConfiguration<Size>
 	{
+		/// <inheritdoc/>
 		public override void ConfigureChild(EntityTypeBuilder<Size> builder)
 		{
 			builder.HasComment("Размеры");

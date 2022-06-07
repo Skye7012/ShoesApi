@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShoesApi.Contracts.Requests.OrderRequests.GetOrdersResponse;
+using ShoesApi.Contracts.Requests.OrderRequests.PostOrderRequest;
 using ShoesApi.Entities;
-using ShoesApi.Requests.OrderRequests;
-using ShoesApi.Responses.OrderResponses.GetOrdersResponse;
 using ShoesApi.Services;
 using System.Linq.Dynamic.Core;
 
 namespace ShoesApi.Controllers
 {
+	/// <summary>
+	/// Orders Controller
+	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class OrdersController : ControllerBase
@@ -16,6 +19,11 @@ namespace ShoesApi.Controllers
 		private readonly ShoesDbContext _context;
 		private readonly IUserService _userService;
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="context">DbContext</param>
+		/// <param name="userService">User service</param>
 		public OrdersController(
 			ShoesDbContext context,
 			IUserService userService)
@@ -24,6 +32,10 @@ namespace ShoesApi.Controllers
 			_userService = userService;
 		}
 
+		/// <summary>
+		/// Get Orders
+		/// </summary>
+		/// <returns>Orders</returns>
 		[HttpGet]
 		[Authorize]
 		public async Task<GetOrdersResponse> Get()
@@ -39,14 +51,14 @@ namespace ShoesApi.Controllers
 				{
 					Id = x.Id,
 					OrderDate = x.OrderDate,
-					Addres = x.Addres,
+					Address = x.Address,
 					Sum = x.Sum,
 					Count = x.Count,
 					OrderItems = x.OrderItems!.Select(i => new GetOrdersResponseItemOrderItem()
 						{
 							Id = i.Id,
 							RuSize = i.Size!.RuSize,
-							Shoe = new GetOrdersResponseItemShoe()
+							Shoe = new GetOrdersResponseItemOrderItemShoe()
 							{
 								Id = i.Shoe!.Id,
 								Image = i.Shoe!.Image,
@@ -67,9 +79,14 @@ namespace ShoesApi.Controllers
 			};
 		}
 
+		/// <summary>
+		/// Post Orders
+		/// </summary>
+		/// <param name="request">Request</param>
+		/// <returns>Order Id</returns>
 		[HttpPost]
 		[Authorize]
-		public async Task<ActionResult<int>> Post(OrderPostRequest request)
+		public async Task<ActionResult<int>> Post(PostOrderRequest request)
 		{
 			var login = _userService.GetLogin();
 			var user = await _context.Users
@@ -100,7 +117,7 @@ namespace ShoesApi.Controllers
 			var order = new Order()
 			{
 				OrderDate = DateTime.UtcNow,
-				Addres = request.Addres,
+				Address = request.Address,
 				Count = orderItems.Count(),
 				Sum = orderItems.Sum(x => x.Shoe!.Price),
 				User = user,
@@ -113,7 +130,7 @@ namespace ShoesApi.Controllers
 			return Ok(order.Id);
 		}
 
-		private bool isOrderItemsUnique(OrderPostRequest request)
+		private bool isOrderItemsUnique(PostOrderRequest request)
 		{
 			return request.OrderItems
 				.GroupBy(x => new { x.ShoeId, x.RuSize })

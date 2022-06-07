@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Конфигурация для <see cref="Destination"/>
+	/// Configuration for <see cref="Destination"/>
 	/// </summary>
 	public class DestinationConfiguration : EntityBaseConfiguration<Destination>
 	{
+		/// <inheritdoc/>
 		public override void ConfigureChild(EntityTypeBuilder<Destination> builder)
 		{
 			builder.HasComment("Назначение обуви");

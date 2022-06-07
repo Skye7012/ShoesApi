@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>b3d88374-4b02-48fb-9978-dfa6c98d5603</UserSecretsId>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,10 +26,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Requests\BrandRequests\" />
   </ItemGroup>
 
 </Project>

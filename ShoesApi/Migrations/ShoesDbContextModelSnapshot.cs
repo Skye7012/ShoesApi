@@ -102,10 +102,10 @@ namespace ShoesApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Addres")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("addres");
+                        .HasColumnName("address");
 
                     b.Property<int>("Count")
                         .HasColumnType("integer")
@@ -295,9 +295,9 @@ namespace ShoesApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Fname")
+                    b.Property<string>("FirstName")
                         .HasColumnType("text")
-                        .HasColumnName("fname");
+                        .HasColumnName("first_name");
 
                     b.Property<string>("Login")
                         .IsRequired()
