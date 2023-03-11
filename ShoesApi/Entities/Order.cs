@@ -6,52 +6,44 @@
 	public class Order : EntityBase
 	{
 		/// <summary>
-		/// OrderDate
+		/// Дата заказа
 		/// </summary>
 		
 		public DateTime OrderDate { get; set; }
 
 		/// <summary>
-		/// Address
+		/// Адрес
 		/// </summary>
-		
+
 		public string Address { get; set; } = default!;
 
 		/// <summary>
-		/// Sum
+		/// Итоговая сумма заказа
 		/// </summary>
-		
 		public int Sum { get; set; }
 
 		/// <summary>
-		/// Count
+		/// Количество вещей в заказе
 		/// </summary>
-		
 		public int Count { get; set; }
 
 		/// <summary>
-		/// UserId
+		/// Идентификатор пользователя
 		/// </summary>
-		
+
 		public int UserId { get; set; }
 
 
 		#region navigation Properties
 
 		/// <summary>
-		/// User
+		/// Пользователь
 		/// </summary>
 		
 		public User? User { get; set; }
 
 		/// <summary>
-		/// Shoes
-		/// </summary>
-		
-		public List<Shoe>? Shoes { get; set; }
-
-		/// <summary>
-		/// OrderItems
+		/// Части заказа
 		/// </summary>
 		
 		public List<OrderItem>? OrderItems { get; set; }

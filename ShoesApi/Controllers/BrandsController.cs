@@ -1,54 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShoesApi.Contracts.Requests.BrandRequests.GetBrandsRequest;
-using System.Linq.Dynamic.Core;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ShoesApi.CQRS.Queries.Brand.GetBrands;
 
 namespace ShoesApi.Controllers
 {
 	/// <summary>
-	/// Brands controller
+	/// Контроллер Брэндов обуви
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class BrandsController : ControllerBase
 	{
-		private readonly ShoesDbContext _context;
+		private readonly IMediator _mediator;
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="context">DbContext</param>
-		public BrandsController(ShoesDbContext context)
-		{
-			_context = context;
-		}
+		/// <param name="mediator">Медиатор</param>
+		public BrandsController(IMediator mediator)
+			=> _mediator = mediator;
 
 		/// <summary>
-		/// Get brands
+		/// Получить список Брэндов обуви
 		/// </summary>
-		/// <returns>Brands</returns>
+		/// <returns>Список Брэндов обуви</returns>
 		[HttpGet]
 		public async Task<GetBrandsResponse> Get()
-		{
-			var query = _context.Brands
-				.Select(x => new GetBrandsResponseItem()
-				{
-					Id = x.Id,
-					Name = x.Name,
-				});
-
-			var count = await query.CountAsync();
-
-			var brands = await query
-				.OrderBy(x => x.Name)
-				.ToListAsync();
-
-
-			return new GetBrandsResponse()
-			{
-				Items = brands,
-				TotalCount = count,
-			};
-		}
+			=> await _mediator.Send(new GetBrandsQuery());
 	}
 }

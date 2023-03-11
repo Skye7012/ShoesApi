@@ -6,39 +6,39 @@
 	public class User : EntityBase
 	{
 		/// <summary>
-		/// Login
+		/// Логин
 		/// </summary>
-		public string Login { get; set; } = null!;
+		public string Login { get; set; } = default!;
 
 		/// <summary>
-		/// PasswordHash
+		/// Хэш пароля
 		/// </summary>
-		public byte[] PasswordHash { get; set; } = null!;
+		public byte[] PasswordHash { get; set; } = default!;
 
 		/// <summary>
-		/// PasswordSalt
+		/// Соль пароля
 		/// </summary>
-		public byte[] PasswordSalt { get; set; } = null!;
+		public byte[] PasswordSalt { get; set; } = default!;
 
 		/// <summary>
-		/// Name
+		/// Имя
 		/// </summary>
-		public string Name { get; set; } = null!;
+		public string Name { get; set; } = default!;
 
 		/// <summary>
-		/// FirstName
+		/// Фамилия
 		/// </summary>
-		public string? FirstName { get; set; }
+		public string? Surname { get; set; }
 
 		/// <summary>
-		/// Phone
+		/// Телефон
 		/// </summary>
 		public string? Phone { get; set; }
 
 		#region navigation Properties
 
 		/// <summary>
-		/// Orders
+		/// Заказы
 		/// </summary>
 		public List<Order>? Orders { get; set; }
 

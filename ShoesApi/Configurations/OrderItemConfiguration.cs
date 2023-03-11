@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Configuration for <see cref="OrderItem"/>
+	/// Конфигурация для <see cref="OrderItem"/>
 	/// </summary>
 	public class OrderItemConfiguration : EntityBaseConfiguration<OrderItem>
 	{

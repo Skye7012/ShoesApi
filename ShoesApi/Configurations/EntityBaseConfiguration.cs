@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Configuration for entities that inherit <see cref="EntityBase"/>
+	/// Конфигурация для сущностей, которые наследуются от <see cref="EntityBase"/>
 	/// </summary>
 	public abstract class EntityBaseConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
 		where TEntity : EntityBase
@@ -17,9 +17,9 @@ namespace ShoesApi.Entities
 		}
 
 		/// <summary>
-		/// Configure <see cref="EntityBase"/>
+		/// Скофигурировать базовые поля из <see cref="EntityBase"/>
 		/// </summary>
-		/// <param name="builder">The builder to be used to configure the entity type</param>
+		/// <param name="builder">Билдер</param>
 		private static void ConfigureBase(EntityTypeBuilder<TEntity> builder)
 		{
 			builder.HasKey(e => e.Id);
@@ -27,9 +27,9 @@ namespace ShoesApi.Entities
 		}
 
 		/// <summary>
-		/// Configure <typeparamref name="TEntity" /> child of <see cref="EntityBase"/>
+		/// Сконфигурировать <typeparamref name="TEntity" /> которая является дочерней от <see cref="EntityBase"/>
 		/// </summary>
-		/// <param name="builder">The builder to be used to configure the entity type</param>
+		/// <param name="builder">Билдер</param>
 		public abstract void ConfigureChild(EntityTypeBuilder<TEntity> builder);
 	}
 }

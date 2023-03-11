@@ -1,20 +1,20 @@
 ﻿namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Брэнды
+	/// Брэнды обуви
 	/// </summary>
 	public class Brand : EntityBase
 	{
 		/// <summary>
-		/// Name
+		/// Наименование
 		/// </summary>
 		
-		public string Name { get; set; } = null!;
+		public string Name { get; set; } = default!;
 
 		#region navigation Properties
 
 		/// <summary>
-		/// Shoes
+		/// Кроссовки
 		/// </summary>
 		
 		public List<Shoe>? Shoes { get; set; }
