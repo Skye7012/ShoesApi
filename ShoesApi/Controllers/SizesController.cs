@@ -1,37 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ShoesApi.CQRS.Queries.Sizes.GetSizes;
 
 namespace ShoesApi.Controllers
 {
 	/// <summary>
-	/// Sizes Controller
+	/// Контроллер Размеров обуви
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class SizesController : ControllerBase
 	{
-		private readonly ShoesDbContext _context;
+		private readonly IMediator _mediator;
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="context">DbContext</param>
-		public SizesController(ShoesDbContext context)
-		{
-			_context = context;
-		}
+		/// <param name="mediator">Медиатор</param>
+		public SizesController(IMediator mediator)
+			=> _mediator = mediator;
 
 		/// <summary>
-		/// Get Sizes
+		/// Получить список Размеров обуви
 		/// </summary>
-		/// <returns>Sizes</returns>
+		/// <returns>Список Размеров обуви</returns>
 		[HttpGet]
 		public async Task<List<int>> Get()
-		{
-			return await _context.Sizes
-				.Select(x => x.RuSize)
-				.ToListAsync();
-		}
+			=> await _mediator.Send(new GetSizesQuery());
 	}
 }

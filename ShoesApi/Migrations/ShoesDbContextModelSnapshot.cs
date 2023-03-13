@@ -22,25 +22,6 @@ namespace ShoesApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("OrderShoe", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("integer")
-                        .HasColumnName("orders_id");
-
-                    b.Property<int>("ShoesId")
-                        .HasColumnType("integer")
-                        .HasColumnName("shoes_id");
-
-                    b.HasKey("OrdersId", "ShoesId")
-                        .HasName("pk_order_shoe");
-
-                    b.HasIndex("ShoesId")
-                        .HasDatabaseName("ix_order_shoe_shoes_id");
-
-                    b.ToTable("order_shoe", (string)null);
-                });
-
             modelBuilder.Entity("ShoesApi.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
@@ -295,10 +276,6 @@ namespace ShoesApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text")
-                        .HasColumnName("first_name");
-
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("text")
@@ -322,6 +299,10 @@ namespace ShoesApi.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text")
                         .HasColumnName("phone");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("text")
+                        .HasColumnName("surname");
 
                     b.HasKey("Id")
                         .HasName("pk_users");
@@ -352,23 +333,6 @@ namespace ShoesApi.Migrations
                         .HasDatabaseName("ix_shoes_sizes_sizes_id");
 
                     b.ToTable("shoes_sizes", (string)null);
-                });
-
-            modelBuilder.Entity("OrderShoe", b =>
-                {
-                    b.HasOne("ShoesApi.Entities.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_order_shoe_orders_orders_id");
-
-                    b.HasOne("ShoesApi.Entities.Shoe", null)
-                        .WithMany()
-                        .HasForeignKey("ShoesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_order_shoe_shoes_shoes_id");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Order", b =>

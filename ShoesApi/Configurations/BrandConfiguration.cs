@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Configuration for <see cref="Brand"/>
+	/// Конфигурация для <see cref="Brand"/>
 	/// </summary>
 	public class BrandConfiguration : EntityBaseConfiguration<Brand>
 	{

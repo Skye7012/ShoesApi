@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Configuration for <see cref="User"/>
+	/// Конфигурация для <see cref="User"/>
 	/// </summary>
 	public class UserConfiguration : EntityBaseConfiguration<User>
 	{
@@ -17,7 +17,7 @@ namespace ShoesApi.Entities
 			builder.Property(e => e.PasswordHash);
 			builder.Property(e => e.PasswordSalt);
 			builder.Property(e => e.Name);
-			builder.Property(e => e.FirstName);
+			builder.Property(e => e.Surname);
 			builder.Property(e => e.Phone);
 
 			builder.HasIndex(e => e.Login)

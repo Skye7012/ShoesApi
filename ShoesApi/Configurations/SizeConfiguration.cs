@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Configuration for <see cref="Size"/>
+	/// Конфигурация для <see cref="Size"/>
 	/// </summary>
 	public class SizeConfiguration : EntityBaseConfiguration<Size>
 	{

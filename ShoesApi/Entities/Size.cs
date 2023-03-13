@@ -1,12 +1,12 @@
 ﻿namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Размер обувь
+	/// Размер обуви
 	/// </summary>
 	public class Size : EntityBase
 	{
 		/// <summary>
-		/// RuSize
+		/// Российский размер
 		/// </summary>
 		public int RuSize { get; set; }
 
@@ -14,12 +14,12 @@
 		#region navigation Properties
 
 		/// <summary>
-		/// Shoes
+		/// Кроссовки
 		/// </summary>
 		public List<Shoe>? Shoes { get; set; }
 
 		/// <summary>
-		/// OrderItems
+		/// Части заказа
 		/// </summary>
 		public List<OrderItem>? OrderItems { get; set; }
 
