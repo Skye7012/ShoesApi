@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ShoesApi.CQRS.Queries.Shoes.GetShoesXml
+namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
 {
 	/// <summary>
 	/// Запрос на получение коллекции обуви 

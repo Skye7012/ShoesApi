@@ -1,4 +1,4 @@
-﻿namespace ShoesApi.CQRS.Queries.Shoes.GetShoesXml
+﻿namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
 {
 	/// <summary>
 	/// ДТО Брэнда обуви из <see cref="GetShoesResponseItem"/>

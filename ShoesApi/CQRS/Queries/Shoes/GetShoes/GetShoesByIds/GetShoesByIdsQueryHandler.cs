@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes;
 
-namespace ShoesApi.CQRS.Queries.Shoes.GetShoesXml.GetShoesByIds
+namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds
 {
 	/// <summary>
 	/// Обработчик для of <see cref="GetShoesByIdsQuery"/>

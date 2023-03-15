@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes;
 using ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml;
-using ShoesApi.CQRS.Queries.Shoes.GetShoesXml;
-using ShoesApi.CQRS.Queries.Shoes.GetShoesXml.GetShoesByIds;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds;
 
 namespace ShoesApi.Controllers
 {

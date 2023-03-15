@@ -12,16 +12,19 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 	{
 		private readonly ShoesDbContext _context;
 		private readonly IUserService _userService;
+		private readonly IDateTimeProvider _dateTimeProvider;
 
 		/// <summary>
 		/// Конструктор
 		/// </summary>
 		/// <param name="context">Контекст БД</param>
 		/// <param name="userService">Сервис пользовательских данных</param>
-		public PostOrderCommandHandler(ShoesDbContext context, IUserService userService)
+		/// <param name="dateTimeProvider"></param>
+		public PostOrderCommandHandler(ShoesDbContext context, IUserService userService, IDateTimeProvider dateTimeProvider)
 		{
 			_context = context;
 			_userService = userService;
+			_dateTimeProvider = dateTimeProvider;
 		}
 
 		/// <inheritdoc/>
@@ -55,7 +58,7 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 
 			var order = new Order()
 			{
-				OrderDate = DateTime.UtcNow,
+				OrderDate = _dateTimeProvider.UtcNow,
 				Address = request.Address,
 				Count = orderItems.Count(),
 				Sum = orderItems.Sum(x => x.Shoe!.Price),

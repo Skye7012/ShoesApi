@@ -32,15 +32,13 @@ namespace ShoesApi.CQRS.Commands.UserCommands.SignUpUser
 
 			_userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-			var user = new User
-			{
-				Login = request.Login,
-				PasswordHash = passwordHash,
-				PasswordSalt = passwordSalt,
-				Name = request.Name,
-				Surname = request.Surname,
-				Phone = request.Phone
-			};
+			var user = new User(
+				login: request.Login,
+				passwordHash: passwordHash,
+				passwordSalt: passwordSalt,
+				name: request.Name,
+				surname: request.Surname,
+				phone: request.Phone);
 
 			await _context.AddAsync(user);
 			await _context.SaveChangesAsync();

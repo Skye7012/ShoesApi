@@ -8,13 +8,11 @@
 		/// <summary>
 		/// Дата заказа
 		/// </summary>
-		
 		public DateTime OrderDate { get; set; }
 
 		/// <summary>
 		/// Адрес
 		/// </summary>
-
 		public string Address { get; set; } = default!;
 
 		/// <summary>
@@ -30,7 +28,6 @@
 		/// <summary>
 		/// Идентификатор пользователя
 		/// </summary>
-
 		public int UserId { get; set; }
 
 
@@ -39,13 +36,11 @@
 		/// <summary>
 		/// Пользователь
 		/// </summary>
-		
 		public User? User { get; set; }
 
 		/// <summary>
 		/// Части заказа
 		/// </summary>
-		
 		public List<OrderItem>? OrderItems { get; set; }
 
 		#endregion

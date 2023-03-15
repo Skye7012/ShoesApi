@@ -1,4 +1,6 @@
-﻿namespace ShoesApi.Entities
+﻿using ShoesApi.Entities.ShoeSimpleFilters;
+
+namespace ShoesApi.Entities
 {
 	/// <summary>
 	/// Обувь
@@ -40,27 +42,27 @@
 		/// <summary>
 		/// Брэнд обуви
 		/// </summary>
-		public virtual Brand? Brand { get; set; }
+		public Brand? Brand { get; set; }
 
 		/// <summary>
 		/// Назначение обуви
 		/// </summary>
-		public virtual Destination? Destination { get; set; }
+		public Destination? Destination { get; set; }
 
 		/// <summary>
 		/// Сезон обуви
 		/// </summary>
-		public virtual Season? Season { get; set; }
+		public Season? Season { get; set; }
 
 		/// <summary>
 		/// Размеры обуви
 		/// </summary>
-		public virtual List<Size>? Sizes { get; set; }
+		public List<Size>? Sizes { get; set; }
 
 		/// <summary>
 		/// Части заказа
 		/// </summary>
-		public List<OrderItem>? OrderItems { get; set; }
+		public List<OrderItem>? OrderItems { get; private set; }
 
 		#endregion
 	}
