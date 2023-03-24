@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Extensions;
 
-namespace ShoesApi.CQRS.Queries.Shoes.GetShoesXml
+namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
 {
 	/// <summary>
 	/// Обработчик для <see cref="GetShoesQuery"/>

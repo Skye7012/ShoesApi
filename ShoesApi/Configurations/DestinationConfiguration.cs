@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShoesApi.Entities.ShoeSimpleFilters;
 
 namespace ShoesApi.Entities
 {

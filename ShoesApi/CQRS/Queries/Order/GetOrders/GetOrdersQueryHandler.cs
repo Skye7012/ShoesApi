@@ -52,7 +52,7 @@ namespace ShoesApi.CQRS.Queries.Order.GetOrders
 							Price = i.Shoe!.Price,
 						}
 					})
-						.ToList()
+					.ToList()
 				});
 
 			var orders = await query.ToListAsync();

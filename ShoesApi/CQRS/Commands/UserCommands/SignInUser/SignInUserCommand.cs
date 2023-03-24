@@ -3,7 +3,7 @@
 namespace ShoesApi.CQRS.Commands.UserCommands.SignInUser
 {
 	/// <summary>
-	/// Команда для авторизаци пользователя
+	/// Команда для авторизации пользователя
 	/// </summary>
 	public class SignInUserCommand : IRequest<SignInUserResponse>
 	{

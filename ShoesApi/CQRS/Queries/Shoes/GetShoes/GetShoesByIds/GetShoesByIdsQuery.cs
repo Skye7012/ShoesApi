@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes;
 
-namespace ShoesApi.CQRS.Queries.Shoes.GetShoesXml.GetShoesByIds
+namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds
 {
 	/// <summary>
 	/// Запрос на получение списка обуви по коллекции идентификаторов

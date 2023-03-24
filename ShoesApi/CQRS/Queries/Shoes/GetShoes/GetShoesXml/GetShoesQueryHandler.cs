@@ -3,9 +3,8 @@ using System.Xml.Serialization;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml;
 
-namespace ShoesApi.CQRS.Queries.Shoes.GetShoesXml.GetShoesXml
+namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml
 {
 	/// <summary>
 	/// Обработчик для of <see cref="GetShoesXmlQuery"/>

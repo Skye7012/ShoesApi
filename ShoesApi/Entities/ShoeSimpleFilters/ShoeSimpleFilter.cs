@@ -1,14 +1,13 @@
-﻿namespace ShoesApi.Entities
+﻿namespace ShoesApi.Entities.ShoeSimpleFilters
 {
 	/// <summary>
-	/// Сезон обуви
+	/// Простой фильтр для Обуви только с наименованием фильтра
 	/// </summary>
-	public class Season : EntityBase
+	public class ShoeSimpleFilter : EntityBase
 	{
 		/// <summary>
 		/// Наименование
 		/// </summary>
-
 		public string Name { get; set; } = default!;
 
 		#region navigation Properties
@@ -16,8 +15,7 @@
 		/// <summary>
 		/// Кроссовки
 		/// </summary>
-
-		public List<Shoe>? Shoes { get; set; }
+		public List<Shoe>? Shoes { get; private set; }
 
 		#endregion
 	}

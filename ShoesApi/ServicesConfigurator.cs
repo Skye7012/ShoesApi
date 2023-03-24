@@ -30,6 +30,7 @@ namespace ShoesApi
 				.AddSwagger()
 				.AddAuthorization(builder.Configuration)
 				.AddScoped<IUserService, UserService>()
+				.AddSingleton<IDateTimeProvider, DateTimeProvider>()
 				.AddDatabase(builder.Configuration);
 		}
 
