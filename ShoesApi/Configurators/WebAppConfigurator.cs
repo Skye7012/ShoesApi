@@ -1,6 +1,6 @@
 ﻿using Microsoft.Net.Http.Headers;
 
-namespace ShoesApi
+namespace ShoesApi.Configurators
 {
 	/// <summary>
 	/// Конфигуратор веб приложения
@@ -19,6 +19,9 @@ namespace ShoesApi
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+
+			// Использование middleware обработчика ошибок
+			app.UseExceptionHandlerMiddleware();
 
 			app.UseCors(
 				options =>

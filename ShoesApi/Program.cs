@@ -1,4 +1,4 @@
-﻿using ShoesApi;
+﻿using ShoesApi.Configurators;
 
 var builder = WebApplication.CreateBuilder(args);
 

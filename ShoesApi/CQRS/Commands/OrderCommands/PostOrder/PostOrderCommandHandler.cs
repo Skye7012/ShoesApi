@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Entities;
+using ShoesApi.Exceptions;
 using ShoesApi.Services;
 
 namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
@@ -33,10 +34,10 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 			var login = _userService.GetLogin();
 			var user = await _context.Users
 				.FirstOrDefaultAsync(x => x.Login == login)
-				?? throw new Exception("User not found");
+				?? throw new UserNotFoundException(login);
 
 			if (!IsOrderItemsUnique(request))
-				throw new Exception("ShoeId and RuSize combination must be unique");
+				throw new ValidationException("Комбинация ShoeId и RuSize должна быть уникальной");
 
 			var shoes = await _context.Shoes
 				.Where(x => request.OrderItems.Select(x => x.ShoeId).Contains(x.Id))
@@ -50,9 +51,9 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 				.Select(x => new OrderItem()
 				{
 					Shoe = shoes.FirstOrDefault(s => s.Id == x.ShoeId)
-						?? throw new Exception($"Not found shoe with id {x.ShoeId}"),
+						?? throw new EntityNotFoundException<Shoe>(x.ShoeId),
 					Size = sizes.FirstOrDefault(s => s.RuSize == x.RuSize)
-						?? throw new Exception($"Not found RuSuze {x.RuSize}"),
+						?? throw new EntityNotFoundException<Size>($"Не найден российский размер = {x.RuSize}"),
 				})
 				.ToList();
 
