@@ -1,4 +1,6 @@
-﻿namespace ShoesApi.Entities
+﻿using ShoesApi.Entities.ShoeSimpleFilters;
+
+namespace ShoesApi.Entities
 {
 	/// <summary>
 	/// Обувь
@@ -6,67 +8,61 @@
 	public class Shoe : EntityBase
 	{
 		/// <summary>
-		/// Name
+		/// Наименование
 		/// </summary>
-		/// <value></value>
-		public string Name { get; set; } = null!;
+		public string Name { get; set; } = default!;
 
 		/// <summary>
-		/// Image name (for path)
+		/// Путь для изображения // TODO: change
 		/// </summary>
-		public string Image { get; set; } = null!;
+		public string Image { get; set; } = default!;
 
 		/// <summary>
-		/// Pice
+		/// Цена
 		/// </summary>
 		public int Price { get; set; }
 
 		/// <summary>
-		/// BrandId
+		/// Идентификатор Брэнда обуви
 		/// </summary>
 		public int? BrandId { get; set; }
 
 		/// <summary>
-		/// DestinationId
+		/// Идентификатор Назначения обуви
 		/// </summary>
 		public int? DestinationId { get; set; }
 
 		/// <summary>
-		/// SeasonId
+		/// Идентификатор Сезона обуви
 		/// </summary>
 		public int? SeasonId { get; set; }
 
 		#region navigation Properties
 
 		/// <summary>
-		/// Brand
+		/// Брэнд обуви
 		/// </summary>
-		public virtual Brand? Brand { get; set; }
+		public Brand? Brand { get; set; }
 
 		/// <summary>
-		/// Destination
+		/// Назначение обуви
 		/// </summary>
-		public virtual Destination? Destination { get; set; }
+		public Destination? Destination { get; set; }
 
 		/// <summary>
-		/// Season
+		/// Сезон обуви
 		/// </summary>
-		public virtual Season? Season { get; set; }
+		public Season? Season { get; set; }
 
 		/// <summary>
-		/// Sizes
+		/// Размеры обуви
 		/// </summary>
-		public virtual List<Size>? Sizes { get; set; }
+		public List<Size>? Sizes { get; set; }
 
 		/// <summary>
-		/// Orders
+		/// Части заказа
 		/// </summary>
-		public virtual List<Order>? Orders { get; set; }
-
-		/// <summary>
-		/// OrderItems
-		/// </summary>
-		public List<OrderItem>? OrderItems { get; set; }
+		public List<OrderItem>? OrderItems { get; private set; }
 
 		#endregion
 	}

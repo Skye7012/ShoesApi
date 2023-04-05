@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShoesApi.Entities;
+using ShoesApi.Entities.ShoeSimpleFilters;
 
 namespace ShoesApi
 {
@@ -7,73 +8,64 @@ namespace ShoesApi
 	public class ShoesDbContext : DbContext
 	{
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
 		public ShoesDbContext()
 		{
 		}
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="options">Options</param>
+		/// <param name="options">Опции контекста</param>
 		public ShoesDbContext(DbContextOptions<ShoesDbContext> options)
 			: base(options)
 		{
 		}
 
 		/// <summary>
-		/// Brands
+		/// Брэнды обуви
 		/// </summary>
-		public virtual DbSet<Brand> Brands { get; set; } = null!;
+		public virtual DbSet<Brand> Brands { get; set; } = default!;
 
 		/// <summary>
-		/// Destinations
+		/// Назначения обуви
 		/// </summary>
-		public virtual DbSet<Destination> Destinations { get; set; } = null!;
+		public virtual DbSet<Destination> Destinations { get; set; } = default!;
 
 		/// <summary>
-		/// Seasons
+		/// Сезоны обуви
 		/// </summary>
-		public virtual DbSet<Season> Seasons { get; set; } = null!;
+		public virtual DbSet<Season> Seasons { get; set; } = default!;
 
 		/// <summary>
-		/// Shoes
+		/// Кроссовки
 		/// </summary>
-		public virtual DbSet<Shoe> Shoes { get; set; } = null!;
+		public virtual DbSet<Shoe> Shoes { get; set; } = default!;
 
 		/// <summary>
-		/// Users
+		/// Пользователи
 		/// </summary>
-		public virtual DbSet<User> Users { get; set; } = null!;
+		public virtual DbSet<User> Users { get; set; } = default!;
 
 		/// <summary>
-		/// Sizes
+		/// Размеры обуви
 		/// </summary>
-		public virtual DbSet<Size> Sizes { get; set; } = null!;
+		public virtual DbSet<Size> Sizes { get; set; } = default!;
 
 		/// <summary>
-		/// Orders
+		/// Заказы
 		/// </summary>
-		public virtual DbSet<Order> Orders { get; set; } = null!;
+		public virtual DbSet<Order> Orders { get; set; } = default!;
 
 		/// <summary>
-		/// OrderItems
+		/// Части заказов
 		/// </summary>
-		public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
+		public virtual DbSet<OrderItem> OrderItems { get; set; } = default!;
 
 
 		/// <inheritdoc/>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.ApplyConfiguration(new BrandConfiguration());
-			modelBuilder.ApplyConfiguration(new DestinationConfiguration());
-			modelBuilder.ApplyConfiguration(new SeasonConfiguration());
-			modelBuilder.ApplyConfiguration(new ShoeConfiguration());
-			modelBuilder.ApplyConfiguration(new UserConfiguration());
-			modelBuilder.ApplyConfiguration(new SizeConfiguration());
-			modelBuilder.ApplyConfiguration(new OrderConfiguration());
-			modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
-		}
+			=> modelBuilder.ApplyConfigurationsFromAssembly(typeof(ShoesDbContext).Assembly);
 	}
 }

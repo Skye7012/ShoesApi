@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShoesApi.Entities.ShoeSimpleFilters;
 
 namespace ShoesApi.Entities
 {
 	/// <summary>
-	/// Configuration for <see cref="Destination"/>
+	/// Конфигурация для <see cref="Destination"/>
 	/// </summary>
 	public class DestinationConfiguration : EntityBaseConfiguration<Destination>
 	{

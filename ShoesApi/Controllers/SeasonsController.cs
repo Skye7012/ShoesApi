@@ -1,54 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShoesApi.Contracts.Requests.SeasonRequests.GetSeasonsRequest;
-using System.Linq.Dynamic.Core;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ShoesApi.CQRS.Queries.Season.GetSeasons;
 
 namespace ShoesApi.Controllers
 {
 	/// <summary>
-	/// Seasons Controller
+	/// Контроллер Сезонов обуви
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class SeasonsController : ControllerBase
 	{
-		private readonly ShoesDbContext _context;
+		private readonly IMediator _mediator;
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="context">DbContext</param>
-		public SeasonsController(ShoesDbContext context)
-		{
-			_context = context;
-		}
+		/// <param name="mediator">Медиатор</param>
+		public SeasonsController(IMediator mediator)
+			=> _mediator = mediator;
 
 		/// <summary>
-		/// Get Seasons
+		/// Получить список Сезонов обуви
 		/// </summary>
-		/// <returns>Seasons</returns>
+		/// <returns>Список Сезонов обуви</returns>
 		[HttpGet]
 		public async Task<GetSeasonsResponse> Get()
-		{
-			var query = _context.Seasons
-				.Select(x => new GetSeasonsResponseItem()
-				{
-					Id = x.Id,
-					Name = x.Name,
-				});
-
-			var count = await query.CountAsync();
-
-			var brands = await query
-				.OrderBy(x => x.Name)
-				.ToListAsync();
-
-
-			return new GetSeasonsResponse()
-			{
-				Items = brands,
-				TotalCount = count,
-			};
-		}
+			=> await _mediator.Send(new GetSeasonsQuery());
 	}
 }

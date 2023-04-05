@@ -1,54 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShoesApi.Contracts.Requests.DestinationRequests.GetDestinationsRequest;
-using System.Linq.Dynamic.Core;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ShoesApi.CQRS.Queries.Destination.GetDestinations;
 
 namespace ShoesApi.Controllers
 {
 	/// <summary>
-	/// Destinations Controller
+	/// Контроллер Назначений обуви
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class DestinationsController : ControllerBase
 	{
-		private readonly ShoesDbContext _context;
+		private readonly IMediator _mediator;
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="context">DbContext</param>
-		public DestinationsController(ShoesDbContext context)
-		{
-			_context = context;
-		}
+		/// <param name="mediator">Медиатор</param>
+		public DestinationsController(IMediator mediator)
+			=> _mediator = mediator;
 
 		/// <summary>
-		/// Get Destinations
+		/// Получить список Назначений обуви
 		/// </summary>
-		/// <returns>Destinations</returns>
+		/// <returns>Список Назначений обуви</returns>
 		[HttpGet]
 		public async Task<GetDestinationsResponse> Get()
-		{
-			var query = _context.Destinations
-				.Select(x => new GetDestinationsResponseItem()
-				{
-					Id = x.Id,
-					Name = x.Name,
-				});
-
-			var count = await query.CountAsync();
-
-			var brands = await query
-				.OrderBy(x => x.Name)
-				.ToListAsync();
-
-
-			return new GetDestinationsResponse()
-			{
-				Items = brands,
-				TotalCount = count,
-			};
-		}
+			=> await _mediator.Send(new GetDestinationsQuery());
 	}
 }

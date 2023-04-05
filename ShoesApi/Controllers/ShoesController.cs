@@ -1,188 +1,52 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShoesApi.Contracts.Requests.ShoesRequests.GetShoesRequest;
-using ShoesApi.Extensions;
-using System.Linq.Dynamic.Core;
-using System.Text;
-using System.Xml.Serialization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds;
 
 namespace ShoesApi.Controllers
 {
 	/// <summary>
-	/// Shoes Controller
+	/// Контроллер Обуви
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class ShoesController : ControllerBase
 	{
-		private readonly ShoesDbContext _context;
+		private readonly IMediator _mediator;
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="context">DbContext</param>
-		public ShoesController(ShoesDbContext context)
-		{
-			_context = context;
-		}
+		/// <param name="mediator">Медиатор</param>
+		public ShoesController(IMediator mediator)
+			=> _mediator = mediator;
 
 		/// <summary>
-		/// Get Shoes
+		/// Получить список обуви
 		/// </summary>
-		/// <param name="request">Request</param>
-		/// <returns>Shoes</returns>
+		/// <param name="request">Запрос</param>
+		/// <returns>Список обуви</returns>
 		[HttpGet]
 		public async Task<GetShoesResponse> Get(
-			[FromQuery] GetShoesRequest request)
-		{
-			var query = _context.Shoes
-				.Select(x => new GetShoesResponseItem()
-				{
-					Id = x.Id,
-					Name = x.Name,
-					Image = x.Image,
-					Price = x.Price,
-					Brand = new GetShoesResponseItemBrand()
-					{
-						Id = x.Brand!.Id,
-						Name = x.Brand!.Name,
-					},
-					Destination = new GetShoesResponseItemDestination()
-					{
-						Id = x.Destination!.Id,
-						Name = x.Destination!.Name,
-					},
-					Season = new GetShoesResponseItemSeason()
-					{
-						Id = x.Season!.Id,
-						Name = x.Season!.Name,
-					},
-					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
-				});
-
-			query = query
-					.Where(x => request.SearchQuery == null || x.Name.ToLower().Contains(request.SearchQuery.ToLower()))
-					.Where(x => request.BrandFilters == null || request.BrandFilters.Contains(x.Brand.Id))
-					.Where(x => request.DestinationFilters == null || request.DestinationFilters.Contains(x.Destination.Id))
-					.Where(x => request.SeasonFilters == null || request.SeasonFilters.Contains(x.Season.Id))
-					.Where(x => request.SizeFilters == null || x.RuSizes
-						.Any(y => request.SizeFilters.Contains(y)));
-
-			var count = await query.CountAsync();
-
-			var shoes = await query
-				.Sort(request)
-				.ToListAsync();
-
-
-			return new GetShoesResponse()
-			{
-				Items = shoes,
-				TotalCount = count,
-			};
-		}
+			[FromQuery] GetShoesQuery request)
+			=> await _mediator.Send(request);
 
 		/// <summary>
-		/// Get Shoes by ids
+		/// Получить список обуви по коллекции идентификаторов
 		/// </summary>
-		/// <param name="ids">Ids</param>
-		/// <returns>Shoes</returns>
+		/// <param name="ids">Коллекция идентификаторов</param>
+		/// <returns>Список обуви по коллекции идентификаторов</returns>
 		[HttpGet("GetByIds")]
 		public async Task<GetShoesResponse> GetByIds([FromQuery] int[] ids)
-		{
-			var query = _context.Shoes
-				.Select(x => new GetShoesResponseItem()
-				{
-					Id = x.Id,
-					Name = x.Name,
-					Image = x.Image,
-					Price = x.Price,
-					Brand = new GetShoesResponseItemBrand()
-					{
-						Id = x.Brand!.Id,
-						Name = x.Brand!.Name,
-					},
-					Destination = new GetShoesResponseItemDestination()
-					{
-						Id = x.Destination!.Id,
-						Name = x.Destination!.Name,
-					},
-					Season = new GetShoesResponseItemSeason()
-					{
-						Id = x.Season!.Id,
-						Name = x.Season!.Name,
-					},
-					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
-				});
-
-			query = query
-				.Where(x => ids.Contains(x.Id));
-
-			var count = await query.CountAsync();
-
-			var shoes = await query
-				.ToListAsync();
-
-
-			return new GetShoesResponse()
-			{
-				Items = shoes,
-				TotalCount = count,
-			};
-		}
+			=> await _mediator.Send(new GetShoesByIdsQuery(ids));
 
 		/// <summary>
-		/// Get serialized into XML info about shoes 
+		/// Получить коллекцию обуви в формате XML
 		/// </summary>
-		/// <returns>Serialized into XML info about shoes </returns>
+		/// <returns>Коллекция обуви в формате XML </returns>
 		[HttpGet("GetXml")]
 		public async Task<FileStreamResult> Get()
-		{
-			var shoes = await _context.Shoes
-				.Select(x => new GetShoesResponseItem()
-				{
-					Id = x.Id,
-					Name = x.Name,
-					Image = x.Image,
-					Price = x.Price,
-					Brand = new GetShoesResponseItemBrand()
-					{
-						Id = x.Brand!.Id,
-						Name = x.Brand!.Name,
-					},
-					Destination = new GetShoesResponseItemDestination()
-					{
-						Id = x.Destination!.Id,
-						Name = x.Destination!.Name,
-					},
-					Season = new GetShoesResponseItemSeason()
-					{
-						Id = x.Season!.Id,
-						Name = x.Season!.Name,
-					},
-					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
-				})
-				.ToListAsync();
-
-			var response = new GetShoesResponse()
-			{
-				TotalCount = shoes.Count,
-				Items = shoes,
-			};
-
-			XmlSerializer xmlSerializer = new XmlSerializer(response.GetType());
-
-			using StringWriter textWriter = new StringWriter();
-			xmlSerializer.Serialize(textWriter, response);
-
-			var fileName = "shoes.xml";
-			var mimeType = "text/xml";
-			var stream = new MemoryStream(Encoding.ASCII.GetBytes(textWriter.ToString()));
-
-			return new FileStreamResult(stream, mimeType)
-			{
-				FileDownloadName = fileName
-			};
-		}
+			=> await _mediator.Send(new GetShoesXmlQuery());
 	}
 }

@@ -1,140 +1,51 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShoesApi.Contracts.Requests.OrderRequests.GetOrdersResponse;
-using ShoesApi.Contracts.Requests.OrderRequests.PostOrderRequest;
-using ShoesApi.Entities;
-using ShoesApi.Services;
-using System.Linq.Dynamic.Core;
+using ShoesApi.CQRS.Commands.OrderCommands.PostOrder;
+using ShoesApi.CQRS.Queries.Order.GetOrders;
 
 namespace ShoesApi.Controllers
 {
 	/// <summary>
-	/// Orders Controller
+	/// Контроллер Заказов
 	/// </summary>
 	[ApiController]
 	[Route("[controller]")]
 	public class OrdersController : ControllerBase
 	{
-		private readonly ShoesDbContext _context;
-		private readonly IUserService _userService;
+		private readonly IMediator _mediator;
 
 		/// <summary>
-		/// Constructor
+		/// Конструктор
 		/// </summary>
-		/// <param name="context">DbContext</param>
-		/// <param name="userService">User service</param>
-		public OrdersController(
-			ShoesDbContext context,
-			IUserService userService)
-		{
-			_context = context;
-			_userService = userService;
-		}
+		/// <param name="mediator">Медиатор</param>
+		public OrdersController(IMediator mediator)
+			=> _mediator = mediator;
 
 		/// <summary>
-		/// Get Orders
+		/// Получить заказы пользователя
 		/// </summary>
-		/// <returns>Orders</returns>
+		/// <returns>Заказы пользователя</returns>
 		[HttpGet]
 		[Authorize]
 		public async Task<GetOrdersResponse> Get()
-		{
-			var login = _userService.GetLogin();
-			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == login)
-				?? throw new Exception("User not found");
-
-			var query = _context.Orders
-				.Where(x => x.User == user)
-				.Select(x => new GetOrdersResponseItem()
-				{
-					Id = x.Id,
-					OrderDate = x.OrderDate,
-					Address = x.Address,
-					Sum = x.Sum,
-					Count = x.Count,
-					OrderItems = x.OrderItems!.Select(i => new GetOrdersResponseItemOrderItem()
-						{
-							Id = i.Id,
-							RuSize = i.Size!.RuSize,
-							Shoe = new GetOrdersResponseItemOrderItemShoe()
-							{
-								Id = i.Shoe!.Id,
-								Image = i.Shoe!.Image,
-								Name = i.Shoe!.Name,
-								Price = i.Shoe!.Price,
-							}
-						})
-						.ToList()
-				});
-
-			var orders = await query.ToListAsync();
-			var count = await query.CountAsync();
-
-			return new GetOrdersResponse()
-			{
-				Items = orders,
-				TotalCount = count,
-			};
-		}
+			=> await _mediator.Send(new GetOrdersQuery());
 
 		/// <summary>
-		/// Post Orders
+		/// Создать заказ
 		/// </summary>
-		/// <param name="request">Request</param>
-		/// <returns>Order Id</returns>
+		/// <param name="command">Команда</param>
+		/// <returns>Идентификатор созданного заказа</returns>
 		[HttpPost]
 		[Authorize]
-		public async Task<ActionResult<int>> Post(PostOrderRequest request)
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<int>> Post(PostOrderCommand command)
 		{
-			var login = _userService.GetLogin();
-			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == login)
-				?? throw new Exception("User not found");
+			var orderId = await _mediator.Send(command);
 
-			if (!isOrderItemsUnique(request))
-				throw new Exception("ShoeId and RuSize combination must be unique");
-
-			var shoes = await _context.Shoes
-				.Where(x => request.OrderItems.Select(x => x.ShoeId).Contains(x.Id))
-				.ToListAsync();
-
-			var sizes = await _context.Sizes
-				.Where(x => request.OrderItems.Select(x => x.RuSize).Contains(x.RuSize))
-				.ToListAsync();
-
-			var orderItems = request.OrderItems
-				.Select(x => new OrderItem()
-				{
-					Shoe = shoes.FirstOrDefault(s => s.Id == x.ShoeId)
-						?? throw new Exception($"Not found shoe with id {x.ShoeId}"),
-					Size = sizes.FirstOrDefault(s => s.RuSize == x.RuSize)
-						?? throw new Exception($"Not found RuSuze {x.RuSize}"),
-				})
-				.ToList();
-
-			var order = new Order()
-			{
-				OrderDate = DateTime.UtcNow,
-				Address = request.Address,
-				Count = orderItems.Count(),
-				Sum = orderItems.Sum(x => x.Shoe!.Price),
-				User = user,
-				OrderItems = orderItems,
-			};
-
-			await _context.AddAsync(order);
-			await _context.SaveChangesAsync();
-
-			return Ok(order.Id);
-		}
-
-		private bool isOrderItemsUnique(PostOrderRequest request)
-		{
-			return request.OrderItems
-				.GroupBy(x => new { x.ShoeId, x.RuSize })
-				.All(x => x.Count() == 1);
+			return CreatedAtAction(nameof(Get), orderId);
 		}
 	}
 }

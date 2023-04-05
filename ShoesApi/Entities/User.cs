@@ -6,43 +6,76 @@
 	public class User : EntityBase
 	{
 		/// <summary>
-		/// Login
+		/// Конструктор
 		/// </summary>
-		public string Login { get; set; } = null!;
+		/// <param name="login">Логин</param>
+		/// <param name="passwordHash">Хэш пароля</param>
+		/// <param name="passwordSalt">Соль пароля</param>
+		/// <param name="name">Имя</param>
+		/// <param name="surname">Фамилия</param>
+		/// <param name="phone">Телефон</param>
+		/// <param name="orders">Заказы</param>
+		public User(
+			string login,
+			byte[] passwordHash,
+			byte[] passwordSalt,
+			string name,
+			string? surname,
+			string? phone,
+			List<Order>? orders = null)
+		{
+			Login = login;
+			PasswordHash = passwordHash;
+			PasswordSalt = passwordSalt;
+			Name = name;
+			Surname = surname;
+			Phone = phone;
+
+			Orders = orders ?? new List<Order>();
+		}
 
 		/// <summary>
-		/// PasswordHash
+		/// Конструктор
 		/// </summary>
-		public byte[] PasswordHash { get; set; } = null!;
+		public User() { }
 
 		/// <summary>
-		/// PasswordSalt
+		/// Логин
 		/// </summary>
-		public byte[] PasswordSalt { get; set; } = null!;
+		public string Login { get; set; } = default!;
 
 		/// <summary>
-		/// Name
+		/// Хэш пароля
 		/// </summary>
-		public string Name { get; set; } = null!;
+		public byte[] PasswordHash { get; set; } = default!;
 
 		/// <summary>
-		/// FirstName
+		/// Соль пароля
 		/// </summary>
-		public string? FirstName { get; set; }
+		public byte[] PasswordSalt { get; set; } = default!;
 
 		/// <summary>
-		/// Phone
+		/// Имя
+		/// </summary>
+		public string Name { get; set; } = default!;
+
+		/// <summary>
+		/// Фамилия
+		/// </summary>
+		public string? Surname { get; set; }
+
+		/// <summary>
+		/// Телефон
 		/// </summary>
 		public string? Phone { get; set; }
 
 		#region navigation Properties
 
 		/// <summary>
-		/// Orders
+		/// Заказы
 		/// </summary>
-		public List<Order>? Orders { get; set; }
+		public List<Order>? Orders { get; private set; }
 
 		#endregion
-
 	}
 }

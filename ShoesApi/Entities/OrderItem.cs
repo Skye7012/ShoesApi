@@ -6,39 +6,39 @@
 	public class OrderItem : EntityBase
 	{
 		/// <summary>
-		/// OrderId
+		/// Идентификатор заказа
 		/// </summary>
 		
 		public int OrderId { get; set; }
-		
+
 		/// <summary>
-		/// ShoeId
+		/// Идентификатор обуви
 		/// </summary>
-		
+
 		public int ShoeId { get; set; }
 
 		/// <summary>
-		/// SizeId
+		/// Идентификатор Размера обуви
 		/// </summary>
-		
+
 		public int SizeId { get; set; }
 
 		#region navigation Properties
 
 		/// <summary>
-		/// Order
+		/// Заказ
 		/// </summary>
 		
 		public Order? Order { get; set; }
 
 		/// <summary>
-		/// Shoe
+		/// Обувь
 		/// </summary>
 		
 		public Shoe? Shoe { get; set; }
 
 		/// <summary>
-		/// Size
+		/// Размер обуви
 		/// </summary>
 		
 		public Size? Size { get; set; }

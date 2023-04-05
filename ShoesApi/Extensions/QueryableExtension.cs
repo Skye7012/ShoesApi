@@ -1,19 +1,19 @@
-﻿using ShoesApi.Contracts;
+﻿using ShoesApi.CQRS.Queries;
 using System.Linq.Dynamic.Core;
 
 namespace ShoesApi.Extensions
 {
 	/// <summary>
-	/// Extensions for <see cref="IQueryable"/>
+	/// Расширение для <see cref="IQueryable"/>
 	/// </summary>
 	public static class QueryableExtension
 	{
 		/// <summary>
-		/// Make pagination and sorting
+		/// Сделать пагинацию и сортировку
 		/// </summary>
 		public static IQueryable<T> Sort<T>(
 			this IQueryable<T> source,
-			GetRequest request)
+			BaseGetQuery request)
 		{
 			var query = source.OrderBy(request.OrderBy + (request.IsAscending ? "" : " desc"))
 				.Skip((request.Page - 1) * request.Limit);
