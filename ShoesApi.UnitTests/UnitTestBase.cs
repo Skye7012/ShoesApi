@@ -47,8 +47,7 @@ namespace ShoesApi.UnitTests
 			// Инициализация начальных данных
 			context.Users.Add(UserService.AdminUser);
 
-			if (seedActions != null)
-				seedActions(context);
+			seedActions?.Invoke(context);
 
 			context.SaveChanges();
 			context.ChangeTracker.Clear();

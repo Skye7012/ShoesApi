@@ -27,6 +27,13 @@ namespace ShoesApi.UnitTests.Mocks
 		/// </summary>
 		public User AdminUser { get; private set; }
 
+		/// <summary>
+		/// Получить тестовый пароль
+		/// </summary>
+		/// <returns>Тестовый пароль</returns>
+		public string GetPassword()
+			=> "AdminPassword";
+
 		/// <inheritdoc/>
 		public string GetLogin()
 			=> AdminUser.Login;
@@ -43,6 +50,6 @@ namespace ShoesApi.UnitTests.Mocks
 
 		/// <inheritdoc/>
 		public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-			=> true;
+			=> password == GetPassword();
 	}
 }

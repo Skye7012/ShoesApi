@@ -22,7 +22,7 @@ namespace ShoesApi.Exceptions
 		/// </summary>
 		/// <param name="id">Идентификатор</param>
 		public EntityNotFoundException(int id) 
-			: base($"Не удалось найти сущность '{nameof(TEntity)}' по id = '{id}'")
+			: base($"Не удалось найти сущность '{typeof(TEntity).Name}' по id = '{id}'")
 		{ }
 
 		/// <summary>

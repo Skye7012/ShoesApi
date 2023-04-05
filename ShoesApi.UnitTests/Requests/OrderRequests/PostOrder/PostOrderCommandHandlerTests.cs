@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ShoesApi.CQRS.Commands.OrderCommands.PostOrder;
 using ShoesApi.Entities;
 using ShoesApi.Entities.ShoeSimpleFilters;
+using ShoesApi.Exceptions;
 using Xunit;
 
 namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
@@ -56,7 +57,6 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
 		/// <summary>
 		/// Должен создать заказ, когда валидна команда
 		/// </summary>
-		/// <returns></returns>
 		[Fact]
 		public async Task PostOrderCommand_ShouldCreateOrder_WhenCommandValid()
 		{
@@ -114,6 +114,135 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
 					second.ShoeId.Should().Be(_shoes[1].Id);
 					second.SizeId.Should().Be(_sizes[1].Id);
 				});
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда пользователь не найден
+		/// </summary>
+		[Fact]
+		public async Task PostOrderCommandHandler_ShouldThrow_WhenUserNotFound()
+		{
+			using var context = CreateInMemoryContext(x =>
+			{
+				x.Users.Remove(UserService.AdminUser);
+				x.SaveChanges();
+			});
+
+			var handler = new PostOrderCommandHandler(context, UserService, DateTimeProvider);
+			var handle = async () => await handler.Handle(new PostOrderCommand(), default);
+
+			await handle.Should()
+				.ThrowAsync<UserNotFoundException>();
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда комбинация ShoeId и RuSize не уникальна
+		/// </summary>
+		[Fact]
+		public async Task PostOrderCommandHandler_ShouldThrow_WhenShoeIdAndRuSizeCombinationNotUnique()
+		{
+			using var context = CreateInMemoryContext(c =>
+			{
+				c.AddRange(_shoes);
+				c.SaveChanges();
+			});
+
+			var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+			{
+				new PostOrderCommandOrderItem
+				{
+					ShoeId = _shoes[0].Id,
+					RuSize = _sizes[0].RuSize,
+				},
+				new PostOrderCommandOrderItem
+				{
+					ShoeId = _shoes[0].Id,
+					RuSize = _sizes[0].RuSize,
+				},
+			};
+
+			var command = new PostOrderCommand
+			{
+				Address = "г. Москва, ул. Пушкина, дом Колотушкина",
+				OrderItems = orderItemsToCreate,
+			};
+
+			var handler = new PostOrderCommandHandler(context, UserService, DateTimeProvider);
+			var handle = async () => await handler.Handle(command, default);
+
+			await handle.Should()
+				.ThrowAsync<ValidationException>()
+				.WithMessage("Комбинация ShoeId и RuSize должна быть уникальной");
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда передан не существующий ShoeId
+		/// </summary>
+		[Fact]
+		public async Task PostOrderCommandHandler_ShouldThrow_WhenGivenNotExistingShoeId()
+		{
+			using var context = CreateInMemoryContext(c =>
+			{
+				c.AddRange(_shoes);
+				c.SaveChanges();
+			});
+
+			var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+			{
+				new PostOrderCommandOrderItem
+				{
+					ShoeId = 404,
+					RuSize = _sizes[0].RuSize,
+				},
+			};
+
+			var command = new PostOrderCommand
+			{
+				Address = "г. Москва, ул. Пушкина, дом Колотушкина",
+				OrderItems = orderItemsToCreate,
+			};
+
+			var handler = new PostOrderCommandHandler(context, UserService, DateTimeProvider);
+			var handle = async () => await handler.Handle(command, default);
+
+			await handle.Should()
+				.ThrowAsync<EntityNotFoundException<Shoe>>()
+				.WithMessage($"Не удалось найти сущность '{nameof(Shoe)}' по id = '{404}'");
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда передан не существующий RuSize
+		/// </summary>
+		[Fact]
+		public async Task PostOrderCommandHandler_ShouldThrow_WhenGivenNotExistingRuSize()
+		{
+			using var context = CreateInMemoryContext(c =>
+			{
+				c.AddRange(_shoes);
+				c.SaveChanges();
+			});
+
+			var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+			{
+				new PostOrderCommandOrderItem
+				{
+					ShoeId = _shoes[0].Id,
+					RuSize = 404,
+				},
+			};
+
+			var command = new PostOrderCommand
+			{
+				Address = "г. Москва, ул. Пушкина, дом Колотушкина",
+				OrderItems = orderItemsToCreate,
+			};
+
+			var handler = new PostOrderCommandHandler(context, UserService, DateTimeProvider);
+			var handle = async () => await handler.Handle(command, default);
+
+			await handle.Should()
+				.ThrowAsync<EntityNotFoundException<Size>>()
+				.WithMessage($"Не найден российский размер = {404}");
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using ShoesApi.CQRS.Commands.UserCommands.SignUpUser;
+using ShoesApi.Exceptions;
 using Xunit;
 
 namespace ShoesApi.UnitTests.Requests.UserRequests.SignUpUser
@@ -14,7 +15,6 @@ namespace ShoesApi.UnitTests.Requests.UserRequests.SignUpUser
 		/// <summary>
 		/// Должен создать пользователя, когда команда валидна
 		/// </summary>
-		/// <returns></returns>
 		[Fact]
 		public async Task SignUpUserCommand_ShouldCreateUser_WhenCommandValid()
 		{
@@ -38,6 +38,31 @@ namespace ShoesApi.UnitTests.Requests.UserRequests.SignUpUser
 			createdUser!.Surname.Should().Be(signUpCommand.Surname);
 			createdUser!.Phone.Should().Be(signUpCommand.Phone);
 			createdUser!.Login.Should().Be(signUpCommand.Login);
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда указан неуникальный логин
+		/// </summary>
+		[Fact]
+		public async Task SignUpUserQueryHandler_ShouldThrow_WhenLoginIsNotUnique()
+		{
+			var signUpCommand = new SignUpUserCommand
+			{
+				Login = UserService.GetLogin(),
+				Password = "testpassword",
+				Name = "TestName",
+				Surname = "TestSurname",
+				Phone = "1234567890"
+			};
+
+			using var context = CreateInMemoryContext();
+
+			var handler = new SignUpUserCommandHandler(context, UserService);
+			var handle = async () => await handler.Handle(signUpCommand, default);
+
+			await handle.Should()
+				.ThrowAsync<ValidationException>()
+				.WithMessage("Пользователь с таким логином уже существует");
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
 using ShoesApi.CQRS.Queries.User.GetUser;
+using ShoesApi.Exceptions;
 using Xunit;
 
 namespace ShoesApi.UnitTests.Requests.UserRequests.GetUser
@@ -26,6 +27,25 @@ namespace ShoesApi.UnitTests.Requests.UserRequests.GetUser
 			result.Login.Should().Be(UserService.AdminUser.Login);
 			result.Surname.Should().Be(UserService.AdminUser.Surname);
 			result.Phone.Should().Be(UserService.AdminUser.Phone);
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда пользователь не найден
+		/// </summary>
+		[Fact]
+		public async Task GetUserQueryHandler_ShouldThrow_WhenUserNotFound()
+		{
+			using var context = CreateInMemoryContext(x =>
+			{
+				x.Users.Remove(UserService.AdminUser);
+				x.SaveChanges();
+			});
+
+			var handler = new GetUserQueryHandler(context, UserService);
+			var handle = async () => await handler.Handle(new GetUserQuery(), default);
+
+			await handle.Should()
+				.ThrowAsync<UserNotFoundException>();
 		}
 	}
 }

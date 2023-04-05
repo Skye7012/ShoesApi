@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using ShoesApi.CQRS.Commands.UserCommands.PutUser;
+using ShoesApi.Exceptions;
 using Xunit;
 
 namespace ShoesApi.UnitTests.Requests.UserRequests.PutUser
@@ -14,7 +15,6 @@ namespace ShoesApi.UnitTests.Requests.UserRequests.PutUser
 		/// <summary>
 		/// Должен обновить пользователя, когда команда валидна
 		/// </summary>
-		/// <returns></returns>
 		[Fact]
 		public async Task PutUserCommand_ShouldUpdateUser_WhenCommandValid()
 		{
@@ -35,6 +35,25 @@ namespace ShoesApi.UnitTests.Requests.UserRequests.PutUser
 			updatedUser!.Name.Should().Be(command.Name);
 			updatedUser!.Surname.Should().Be(command.Surname);
 			updatedUser!.Phone.Should().Be(command.Phone);
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда пользователь не найден
+		/// </summary>
+		[Fact]
+		public async Task PutUserQueryHandler_ShouldThrow_WhenUserNotFound()
+		{
+			using var context = CreateInMemoryContext(x =>
+			{
+				x.Users.Remove(UserService.AdminUser);
+				x.SaveChanges();
+			});
+
+			var handler = new PutUserCommandHandler(context, UserService);
+			var handle = async () => await handler.Handle(new PutUserCommand(), default);
+
+			await handle.Should()
+				.ThrowAsync<UserNotFoundException>();
 		}
 	}
 }

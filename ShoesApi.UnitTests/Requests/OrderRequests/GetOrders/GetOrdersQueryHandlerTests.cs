@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ShoesApi.CQRS.Queries.Order.GetOrders;
 using ShoesApi.Entities;
 using ShoesApi.Entities.ShoeSimpleFilters;
+using ShoesApi.Exceptions;
 using Xunit;
 
 namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
@@ -108,6 +109,25 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
 			resultFirstOrderItem.Shoe.Image.Should().Be(firstOrderItem.Shoe!.Image);
 			resultFirstOrderItem.Shoe.Name.Should().Be(firstOrderItem.Shoe!.Name);
 			resultFirstOrderItem.Shoe.Price.Should().Be(firstOrderItem.Shoe!.Price);
+		}
+
+		/// <summary>
+		/// Должен выкинуть ошибку, когда пользователь не найден
+		/// </summary>
+		[Fact]
+		public async Task GetOrdersQueryHandler_ShouldThrow_WhenUserNotFound()
+		{
+			using var context = CreateInMemoryContext(x =>
+			{
+				x.Users.Remove(UserService.AdminUser);
+				x.SaveChanges();
+			});
+
+			var handler = new GetOrdersQueryHandler(context, UserService);
+			var handle = async () => await handler.Handle(new GetOrdersQuery(), default);
+
+			await handle.Should()
+				.ThrowAsync<UserNotFoundException>();
 		}
 	}
 }

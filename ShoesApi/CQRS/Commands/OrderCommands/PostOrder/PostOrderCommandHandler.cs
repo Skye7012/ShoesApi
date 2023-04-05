@@ -61,7 +61,7 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 			{
 				OrderDate = _dateTimeProvider.UtcNow,
 				Address = request.Address,
-				Count = orderItems.Count(),
+				Count = orderItems.Count,
 				Sum = orderItems.Sum(x => x.Shoe!.Price),
 				User = user,
 				OrderItems = orderItems,
