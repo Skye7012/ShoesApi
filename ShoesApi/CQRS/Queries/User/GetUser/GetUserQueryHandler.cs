@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ShoesApi.Exceptions;
 using ShoesApi.Services;
 
 namespace ShoesApi.CQRS.Queries.User.GetUser
@@ -29,7 +30,7 @@ namespace ShoesApi.CQRS.Queries.User.GetUser
 			var login = _userService.GetLogin();
 			var user = await _context.Users
 				.FirstOrDefaultAsync(x => x.Login == login)
-				?? throw new Exception("User not found");
+				?? throw new UserNotFoundException(login);
 
 			return new GetUserResponse()
 			{

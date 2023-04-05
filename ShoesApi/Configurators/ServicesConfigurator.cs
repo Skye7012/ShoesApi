@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ShoesApi.Filters;
 using ShoesApi.Services;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace ShoesApi
+namespace ShoesApi.Configurators
 {
 	/// <summary>
 	/// Конфигуратор сервисов
@@ -21,7 +22,10 @@ namespace ShoesApi
 		/// <returns></returns>
 		public static void ConfigureServices(this WebApplicationBuilder builder)
 		{
-			builder.Services.AddControllers();
+			builder.Services.AddControllers(opt =>
+				{
+					opt.Filters.Add<VoidAndTaskTo204NoContentFilter>();
+				});
 
 			builder.Services.AddEndpointsApiExplorer()
 				.AddHttpContextAccessor()
@@ -77,7 +81,7 @@ namespace ShoesApi
 							ValidateAudience = false
 						};
 					});
-			return services; 
+			return services;
 		}
 
 		/// <summary>

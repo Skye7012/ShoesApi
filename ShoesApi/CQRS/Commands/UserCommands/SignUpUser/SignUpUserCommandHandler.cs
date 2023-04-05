@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ShoesApi.Entities;
+using ShoesApi.Exceptions;
 using ShoesApi.Services;
 
 namespace ShoesApi.CQRS.Commands.UserCommands.SignUpUser
@@ -28,7 +29,7 @@ namespace ShoesApi.CQRS.Commands.UserCommands.SignUpUser
 		{
 			var isLoginUnique = _context.Users.All(x => x.Login != request.Login);
 			if (!isLoginUnique)
-				throw new Exception("User with such login already exists");
+				throw new ValidationException("Пользователь с таким логином уже существует");
 
 			_userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

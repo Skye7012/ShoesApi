@@ -38,11 +38,14 @@ namespace ShoesApi.Controllers
 		/// <returns>Идентификатор созданного заказа</returns>
 		[HttpPost]
 		[Authorize]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<int>> Post(PostOrderCommand command)
 		{
 			var orderId = await _mediator.Send(command);
 
-			return Ok(orderId);
+			return CreatedAtAction(nameof(Get), orderId);
 		}
 	}
 }

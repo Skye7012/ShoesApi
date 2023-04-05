@@ -41,8 +41,10 @@ namespace ShoesApi.Controllers
 		/// <param name="request">Запрос</param>
 		/// <returns>Идентификатор созданного пользователя</returns>
 		[HttpPost("SignUp")]
-		public async Task<SignUpUserResponse> SignUp(SignUpUserCommand request)
-			=> await _mediator.Send(request);
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<ActionResult<SignUpUserResponse>> SignUp(SignUpUserCommand request)
+			=> CreatedAtAction(nameof(Get), await _mediator.Send(request));
 
 		/// <summary>
 		/// Авторизоваться
@@ -50,18 +52,10 @@ namespace ShoesApi.Controllers
 		/// <param name="request">Запрос</param>
 		/// <returns>Authorization token</returns>
 		[HttpPost("SignIn")]
-		public async Task<ActionResult<SignInUserResponse>> SignIn(SignInUserCommand request)
-		{
-			// TODO: реализовать обработку ошибок
-			try
-			{
-				return Ok(await _mediator.Send(request));
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<SignInUserResponse> SignIn(SignInUserCommand request) 
+			=> await _mediator.Send(request);
 
 		/// <summary>
 		/// Обновить данные о пользователе
@@ -69,6 +63,8 @@ namespace ShoesApi.Controllers
 		/// <param name="request">Запрос</param>
 		[HttpPut]
 		[Authorize]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task Put(PutUserCommand request)
 			=> await _mediator.Send(request);
 
@@ -77,6 +73,8 @@ namespace ShoesApi.Controllers
 		/// </summary>
 		[HttpDelete]
 		[Authorize]
+		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task Delete()
 			=> await _mediator.Send(new DeleteUserCommand());
 	}

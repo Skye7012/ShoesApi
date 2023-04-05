@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ShoesApi.Exceptions;
 using ShoesApi.Services;
 
 namespace ShoesApi.CQRS.Queries.Order.GetOrders
@@ -29,7 +30,7 @@ namespace ShoesApi.CQRS.Queries.Order.GetOrders
 			var login = _userService.GetLogin();
 			var user = await _context.Users
 				.FirstOrDefaultAsync(x => x.Login == login)
-				?? throw new Exception("User not found");
+				?? throw new UserNotFoundException(login);
 
 			var query = _context.Orders
 				.Where(x => x.User == user)
