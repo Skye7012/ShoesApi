@@ -19,7 +19,6 @@ namespace ShoesApi.Configurators
 		/// Сконфигурировать сервисы
 		/// </summary>
 		/// <param name="builder">Билдер приложения</param>
-		/// <returns></returns>
 		public static void ConfigureServices(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddControllers(opt =>

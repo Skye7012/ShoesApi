@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ShoesApi.Entities.ShoeSimpleFilters;
+using ShoesApi.InitialData;
 
 namespace ShoesApi.Entities
 {
@@ -24,6 +25,8 @@ namespace ShoesApi.Entities
 				.HasForeignKey(d => d.SeasonId)
 				.HasPrincipalKey(p => p.Id)
 				.OnDelete(DeleteBehavior.ClientCascade);
+
+			builder.HasData(InitialDataStorage.Seasons);
 		}
 	}
 }

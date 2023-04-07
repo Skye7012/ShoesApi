@@ -11,7 +11,6 @@ namespace ShoesApi.Configurators
 		/// Сконфигурировать сервисы
 		/// </summary>
 		/// <param name="app">Билдер веб приложения</param>
-		/// <returns></returns>
 		public static void ConfigureWebApp(this WebApplication app)
 		{
 			if (app.Environment.IsDevelopment())

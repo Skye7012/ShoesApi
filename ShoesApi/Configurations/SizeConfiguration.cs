@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ShoesApi.InitialData;
 
 namespace ShoesApi.Entities
 {
@@ -28,6 +29,8 @@ namespace ShoesApi.Entities
 				.HasForeignKey(pt => pt.SizeId)
 				.HasPrincipalKey(t => t.Id)
 				.OnDelete(DeleteBehavior.ClientCascade);
+
+			builder.HasData(InitialDataStorage.Sizes);
 		}
 	}
 }
