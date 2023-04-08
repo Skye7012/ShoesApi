@@ -4,7 +4,7 @@ using ShoesApi.CQRS.Queries.User.GetUser;
 using ShoesApi.Exceptions;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.UserRequests.GetUser
+namespace ShoesApi.UnitTests.Requests.UserRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetUserQueryHandler"/>
@@ -22,7 +22,7 @@ namespace ShoesApi.UnitTests.Requests.UserRequests.GetUser
 			var result = await handler.Handle(new GetUserQuery(), default);
 
 			result.Should().NotBeNull();
-			
+
 			result.Name.Should().Be(UserService.AdminUser.Name);
 			result.Login.Should().Be(UserService.AdminUser.Login);
 			result.Surname.Should().Be(UserService.AdminUser.Surname);

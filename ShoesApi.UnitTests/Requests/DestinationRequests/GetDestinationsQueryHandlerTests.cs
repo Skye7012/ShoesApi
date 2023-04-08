@@ -6,7 +6,7 @@ using ShoesApi.CQRS.Queries.Destination.GetDestinations;
 using ShoesApi.Entities.ShoeSimpleFilters;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.DestinationRequests.GetDestinations
+namespace ShoesApi.UnitTests.Requests.DestinationRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetDestinationsQueryHandler"/>

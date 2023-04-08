@@ -6,7 +6,7 @@ using ShoesApi.CQRS.Queries.Season.GetSeasons;
 using ShoesApi.Entities.ShoeSimpleFilters;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.SeasonRequests.GetSeasons
+namespace ShoesApi.UnitTests.Requests.SeasonRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetSeasonsQueryHandler"/>

@@ -5,7 +5,7 @@ using ShoesApi.CQRS.Commands.UserCommands.DeleteUser;
 using ShoesApi.Exceptions;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.UserRequests.DeleteUser
+namespace ShoesApi.UnitTests.Requests.UserRequests
 {
 	/// <summary>
 	/// Тест для <see cref="DeleteUserCommandHandler"/>

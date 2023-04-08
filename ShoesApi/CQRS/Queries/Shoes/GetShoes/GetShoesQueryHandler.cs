@@ -26,7 +26,7 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
 				{
 					Id = x.Id,
 					Name = x.Name,
-					Image = x.Image,
+					ImageFileId = x.ImageFileId,
 					Price = x.Price,
 					Brand = new GetShoesResponseItemBrand()
 					{
@@ -54,11 +54,11 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
 					.Where(x => request.SizeFilters == null || x.RuSizes
 						.Any(y => request.SizeFilters.Contains(y)));
 
-			var count = await query.CountAsync();
+			var count = await query.CountAsync(cancellationToken);
 
 			var shoes = await query
 				.Sort(request)
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 
 			return new GetShoesResponse()

@@ -1,13 +1,13 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using System.Linq;
-using System.Collections.Generic;
-using ShoesApi.Entities;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.CQRS.Queries.Order.GetOrders;
-using System.Net.Http;
 using ShoesApi.CQRS.Commands.OrderCommands.PostOrder;
+using ShoesApi.CQRS.Queries.Order.GetOrders;
+using ShoesApi.Entities;
+using Xunit;
 
 namespace ShoesApi.IntegrationTests.Controllers
 {
@@ -28,7 +28,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 		/// Возвращает коллекцию заказов пользователя, когда она существует
 		/// </summary>
 		[Fact]
-		public async Task Get_ReturnsOrders_WhenTheyExist()
+		public async Task GetAsync_ReturnsOrders_WhenTheyExist()
 		{
 			var shoes = await Seeder.SeedShoesAsync();
 			var sizes = await DbContext.Sizes.ToListAsync();
@@ -98,7 +98,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 			var orderItem = order.OrderItems!.First();
 			var responseOrderItem = responseOrder.OrderItems!.First();
 			responseOrderItem.RuSize.Should().Be(orderItem.Size!.RuSize);
-			responseOrderItem.Shoe.Image.Should().Be(orderItem.Shoe!.Image);
+			responseOrderItem.Shoe.ImageFileId.Should().Be(orderItem.Shoe!.ImageFileId);
 			responseOrderItem.Shoe.Name.Should().Be(orderItem.Shoe!.Name);
 			responseOrderItem.Shoe.Price.Should().Be(orderItem.Shoe!.Price);
 		}
@@ -107,7 +107,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 		/// Создает заказ при валидном запросе
 		/// </summary>
 		[Fact]
-		public async Task Post_CreateOrder_WhenRequestValid()
+		public async Task PostAsync_CreateOrder_WhenRequestValid()
 		{
 			var shoes = await Seeder.SeedShoesAsync();
 			var sizes = await DbContext.Sizes.ToListAsync();
@@ -132,7 +132,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 						}
 					}
 				})
-				.GetResponseAsyncAs<int>();
+					.GetResponseAsyncAs<int>();
 
 			var createdOrder = await DbContext.Orders
 				.Include(x => x.OrderItems)

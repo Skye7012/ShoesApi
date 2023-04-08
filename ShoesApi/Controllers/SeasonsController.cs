@@ -23,9 +23,10 @@ namespace ShoesApi.Controllers
 		/// <summary>
 		/// Получить список Сезонов обуви
 		/// </summary>
+		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Список Сезонов обуви</returns>
 		[HttpGet]
-		public async Task<GetSeasonsResponse> Get()
-			=> await _mediator.Send(new GetSeasonsQuery());
+		public async Task<GetSeasonsResponse> GetAsync(CancellationToken cancellationToken)
+			=> await _mediator.Send(new GetSeasonsQuery(), cancellationToken);
 	}
 }

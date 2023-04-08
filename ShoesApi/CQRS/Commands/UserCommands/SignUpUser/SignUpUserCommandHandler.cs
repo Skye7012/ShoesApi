@@ -41,8 +41,8 @@ namespace ShoesApi.CQRS.Commands.UserCommands.SignUpUser
 				surname: request.Surname,
 				phone: request.Phone);
 
-			await _context.AddAsync(user);
-			await _context.SaveChangesAsync();
+			await _context.AddAsync(user, cancellationToken);
+			await _context.SaveChangesAsync(cancellationToken);
 
 			return new SignUpUserResponse()
 			{

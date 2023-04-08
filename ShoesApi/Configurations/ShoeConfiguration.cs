@@ -14,15 +14,18 @@ namespace ShoesApi.Entities
 			builder.HasComment("Обувь");
 
 			builder.Property(e => e.Name);
-			builder.Property(e => e.Image)
-				.HasComment("Название изображения (для пути)");
+			builder.Property(e => e.ImageFileId);
 			builder.Property(e => e.Price)
 				.HasComment("Цена");
 
 			builder.HasIndex(e => e.Name)
 				.IsUnique();
-			builder.HasIndex(e => e.Image)
-				.IsUnique();
+
+			builder.HasOne(d => d.ImageFile)
+				.WithMany(p => p.Shoes)
+				.HasForeignKey(d => d.ImageFileId)
+				.HasPrincipalKey(p => p.Id)
+				.OnDelete(DeleteBehavior.ClientCascade);
 
 			builder.HasOne(d => d.Brand)
 				.WithMany(p => p.Shoes)

@@ -2,20 +2,20 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using ShoesApi.CQRS.Queries.Order.GetOrders;
 using ShoesApi.Entities;
 using ShoesApi.Entities.ShoeSimpleFilters;
 using ShoesApi.Exceptions;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
+namespace ShoesApi.UnitTests.Requests.OrderRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetOrdersQueryHandler"/>
 	/// </summary>
 	public class GetOrdersQueryHandlerTests : UnitTestBase
 	{
+		private readonly File _imageFile;
 		private readonly List<Size> _sizes;
 		private readonly Order _order;
 
@@ -24,6 +24,8 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
 		/// </summary>
 		public GetOrdersQueryHandlerTests()
 		{
+			_imageFile = new File("test");
+
 			_sizes = new List<Size>
 			{
 				new Size { RuSize = 40 },
@@ -44,7 +46,7 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
 						Shoe =  new Shoe
 						{
 							Name = "Sneakers",
-							Image = "image.png",
+							ImageFile = _imageFile,
 							Price = 100,
 							Brand = new Brand { Name = "Adidas" },
 							Destination = new Destination { Name = "Sport"},
@@ -58,7 +60,7 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
 						Shoe = new Shoe
 						{
 							Name = "Boots",
-							Image = "boots_image.png",
+							ImageFile = _imageFile,
 							Price = 200,
 							Brand = new Brand { Name = "Dr. Martens" },
 							Destination = new Destination { Name = "Everyday" },
@@ -88,7 +90,7 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
 
 			result.TotalCount.Should().Be(1);
 			result.Items.Should().NotBeNullOrEmpty();
-			
+
 			var resultOrder = Assert.Single(result.Items!);
 
 			resultOrder.Id.Should().Be(_order.Id);
@@ -106,7 +108,7 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.GetOrders
 			resultFirstOrderItem.Id.Should().Be(firstOrderItem.Id);
 			resultFirstOrderItem.RuSize.Should().Be(firstOrderItem.Size!.RuSize);
 			resultFirstOrderItem.Shoe.Id.Should().Be(firstOrderItem.Shoe!.Id);
-			resultFirstOrderItem.Shoe.Image.Should().Be(firstOrderItem.Shoe!.Image);
+			resultFirstOrderItem.Shoe.ImageFileId.Should().Be(firstOrderItem.Shoe!.ImageFileId);
 			resultFirstOrderItem.Shoe.Name.Should().Be(firstOrderItem.Shoe!.Name);
 			resultFirstOrderItem.Shoe.Price.Should().Be(firstOrderItem.Shoe!.Price);
 		}

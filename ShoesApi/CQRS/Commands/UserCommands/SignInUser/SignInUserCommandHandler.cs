@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.Entities;
 using ShoesApi.Exceptions;
 using ShoesApi.Services;
 
@@ -29,7 +28,7 @@ namespace ShoesApi.CQRS.Commands.UserCommands.SignInUser
 		public async Task<SignInUserResponse> Handle(SignInUserCommand request, CancellationToken cancellationToken)
 		{
 			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == request.Login)
+				.FirstOrDefaultAsync(x => x.Login == request.Login, cancellationToken)
 				?? throw new UserNotFoundException(request.Login);
 
 			if (!_userService.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))

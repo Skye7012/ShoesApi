@@ -5,7 +5,7 @@ using ShoesApi.CQRS.Queries.Sizes.GetSizes;
 using ShoesApi.Entities;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.SizeRequests.GetSizes
+namespace ShoesApi.UnitTests.Requests.SizeRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetSizesQueryHandler"/>

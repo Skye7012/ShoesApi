@@ -13,7 +13,7 @@ namespace ShoesApi.IntegrationTests
 		/// </summary>
 		/// <typeparam name="T">Тип ответа</typeparam>
 		/// <param name="response">HTTP ответ</param>
-		public static async Task<T> GetResponseAsyncAs<T>(this Task<HttpResponseMessage> response) 
+		public static async Task<T> GetResponseAsyncAs<T>(this Task<HttpResponseMessage> response)
 			=> await (await response).Content.ReadAsAsync<T>();
 	}
 }

@@ -29,7 +29,7 @@ namespace ShoesApi.CQRS.Queries.User.GetUser
 		{
 			var login = _userService.GetLogin();
 			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == login)
+				.FirstOrDefaultAsync(x => x.Login == login, cancellationToken)
 				?? throw new UserNotFoundException(login);
 
 			return new GetUserResponse()

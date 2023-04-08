@@ -6,7 +6,7 @@ namespace ShoesApi.IntegrationTests
 	/// Определение общей коллекции <see cref="IntegrationTestFactory{TProgram, TDbContext}"/>
 	/// </summary>
 	[CollectionDefinition("FactoryCollection")]
-	public class IntegrationTestFactoryCollection: ICollectionFixture<IntegrationTestFactory<Program, ShoesDbContext>>
+	public class IntegrationTestFactoryCollection : ICollectionFixture<IntegrationTestFactory<Program, ShoesDbContext>>
 	{
 	}
 }

@@ -22,15 +22,15 @@ namespace ShoesApi.IntegrationTests
 		{
 			_context = dbContext;
 
-			userService.CreatePasswordHash("admin", out var passwordHash, out var passwordSalt);
+			userService.CreatePasswordHash("AdminPassword", out var passwordHash, out var passwordSalt);
 
 			AdminUser = new User
 			{
-				Login = "admin",
+				Login = "AdminLogin",
 				PasswordHash = passwordHash,
 				PasswordSalt = passwordSalt,
-				Name = "admin",
-				Surname = "admin",
+				Name = "AdminName",
+				Surname = "AdminSurname",
 				Phone = "88005553535",
 			};
 		}
@@ -60,7 +60,7 @@ namespace ShoesApi.IntegrationTests
 			await _context.Destinations.AddRangeAsync(InitialDataStorage.Destinations);
 			await _context.Seasons.AddRangeAsync(InitialDataStorage.Seasons);
 			await _context.Sizes.AddRangeAsync(InitialDataStorage.Sizes);
-			
+
 			await _context.SaveChangesAsync();
 		}
 
@@ -70,14 +70,15 @@ namespace ShoesApi.IntegrationTests
 		/// <returns>Добавленная обувь</returns>
 		public async Task<List<Shoe>> SeedShoesAsync()
 		{
+			var imageFile = new File("test.test");
 			var sizes = await _context.Sizes.ToListAsync();
-			
+
 			var shoes = new List<Shoe>
 			{
 				new Shoe
 				{
 					Name = "Shoe1",
-					Image = "ShoeImage1",
+					ImageFile = imageFile,
 					Price = 100,
 					BrandId = 1,
 					DestinationId = 1,
@@ -87,7 +88,7 @@ namespace ShoesApi.IntegrationTests
 				new Shoe
 				{
 					Name = "Shoe2",
-					Image = "ShoeImage2",
+					ImageFile = imageFile,
 					Price = 200,
 					BrandId = 2,
 					DestinationId = 2,

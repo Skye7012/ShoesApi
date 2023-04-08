@@ -29,53 +29,66 @@ namespace ShoesApi.Controllers
 		/// <summary>
 		/// Получить данные о пользователе
 		/// </summary>
+		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Данные о пользователе</returns>
 		[HttpGet]
 		[Authorize]
-		public async Task<GetUserResponse> Get()
-			=> await _mediator.Send(new GetUserQuery());
+		public async Task<GetUserResponse> GetAsync(CancellationToken cancellationToken)
+			=> await _mediator.Send(new GetUserQuery(), cancellationToken);
 
 		/// <summary>
 		/// Зарегистрироваться
 		/// </summary>
 		/// <param name="request">Запрос</param>
+		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Идентификатор созданного пользователя</returns>
 		[HttpPost("SignUp")]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<ActionResult<SignUpUserResponse>> SignUp(SignUpUserCommand request)
-			=> CreatedAtAction(nameof(Get), await _mediator.Send(request));
+		public async Task<ActionResult<SignUpUserResponse>> SignUpAsync(
+			SignUpUserCommand request,
+			CancellationToken cancellationToken)
+				=> CreatedAtAction(
+					nameof(GetAsync),
+					await _mediator.Send(request, cancellationToken));
 
 		/// <summary>
 		/// Авторизоваться
 		/// </summary>
 		/// <param name="request">Запрос</param>
+		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Authorization token</returns>
 		[HttpPost("SignIn")]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<SignInUserResponse> SignIn(SignInUserCommand request) 
-			=> await _mediator.Send(request);
+		public async Task<SignInUserResponse> SignInAsync(
+			SignInUserCommand request,
+			CancellationToken cancellationToken)
+			=> await _mediator.Send(request, cancellationToken);
 
 		/// <summary>
 		/// Обновить данные о пользователе
 		/// </summary>
 		/// <param name="request">Запрос</param>
+		/// <param name="cancellationToken">Токен отмены</param>
 		[HttpPut]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task Put(PutUserCommand request)
-			=> await _mediator.Send(request);
+		public async Task PutAsync(
+			PutUserCommand request,
+			CancellationToken cancellationToken)
+			=> await _mediator.Send(request, cancellationToken);
 
 		/// <summary>
 		/// Удалить пользователя
 		/// </summary>
+		/// <param name="cancellationToken">Токен отмены</param>
 		[HttpDelete]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task Delete()
-			=> await _mediator.Send(new DeleteUserCommand());
+		public async Task DeleteAsync(CancellationToken cancellationToken)
+			=> await _mediator.Send(new DeleteUserCommand(), cancellationToken);
 	}
 }

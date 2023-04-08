@@ -4,6 +4,6 @@
 	/// Брэнды обуви
 	/// </summary>
 	public class Brand : ShoeSimpleFilter
-	{ 
+	{
 	}
 }

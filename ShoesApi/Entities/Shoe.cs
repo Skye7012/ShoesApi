@@ -13,9 +13,9 @@ namespace ShoesApi.Entities
 		public string Name { get; set; } = default!;
 
 		/// <summary>
-		/// Путь для изображения // TODO: change
+		/// Идентификатор файла изображения
 		/// </summary>
-		public string Image { get; set; } = default!;
+		public int ImageFileId { get; set; }
 
 		/// <summary>
 		/// Цена
@@ -38,6 +38,11 @@ namespace ShoesApi.Entities
 		public int? SeasonId { get; set; }
 
 		#region navigation Properties
+
+		/// <summary>
+		/// Файл изображения
+		/// </summary>
+		public File? ImageFile { get; set; }
 
 		/// <summary>
 		/// Брэнд обуви

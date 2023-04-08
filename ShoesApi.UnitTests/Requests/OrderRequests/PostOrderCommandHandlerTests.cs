@@ -8,7 +8,7 @@ using ShoesApi.Entities.ShoeSimpleFilters;
 using ShoesApi.Exceptions;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
+namespace ShoesApi.UnitTests.Requests.OrderRequests
 {
 	/// <summary>
 	/// Тест для <see cref="PostOrderCommandHandler"/>
@@ -23,6 +23,8 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
 		/// </summary>
 		public PostOrderCommandHandlerTests()
 		{
+			var imageFile = new File("test");
+
 			_sizes = new List<Size>
 			{
 				new Size { RuSize = 40 },
@@ -34,7 +36,7 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
 				new Shoe
 				{
 					Name = "Sneakers",
-					Image = "image.png",
+					ImageFile = imageFile,
 					Price = 100,
 					Brand = new Brand { Name = "Adidas" },
 					Destination = new Destination { Name = "Sport" },
@@ -44,7 +46,7 @@ namespace ShoesApi.UnitTests.Requests.OrderRequests.PostOrder
 				new Shoe
 				{
 					Name = "Boots",
-					Image = "boots_image.png",
+					ImageFile = imageFile,
 					Price = 200,
 					Brand = new Brand { Name = "Dr. Martens" },
 					Destination = new Destination { Name = "Everyday" },

@@ -1,15 +1,18 @@
-﻿using Xunit;
-using ShoesApi.Controllers;
-using System.Net.Http.Json;
-using ShoesApi.CQRS.Commands.UserCommands.SignUpUser;
-using System.Threading.Tasks;
-using System.Net.Http;
-using FluentAssertions;
-using ShoesApi.CQRS.Queries.User.GetUser;
-using ShoesApi.CQRS.Commands.UserCommands.SignInUser;
-using ShoesApi.CQRS.Commands.UserCommands.PutUser;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using ShoesApi.Controllers;
+using ShoesApi.CQRS.Commands.UserCommands.PutUser;
+using ShoesApi.CQRS.Commands.UserCommands.SignInUser;
+using ShoesApi.CQRS.Commands.UserCommands.SignUpUser;
+using ShoesApi.CQRS.Queries.User.GetUser;
+using Xunit;
 
 namespace ShoesApi.IntegrationTests.Controllers
 {
@@ -27,104 +30,116 @@ namespace ShoesApi.IntegrationTests.Controllers
 		}
 
 		/// <summary>
-		/// Полный happy path
-		/// Должен создать пользователя, аутентифицироваться, получить его данные, обновить и удалить
+		/// Должен вернуть данные о пользователе, когда он существует
 		/// </summary>
 		[Fact]
-		public async Task UserController_HappyPath_ShouldCreateAndGetAndUpdateAndDeleteUser()
+		public async Task GetAsync_ShouldReturnUser_WhenUserExist()
 		{
-			var userId = await SignUpAsync();
-			await SignInAsync();
-			await GetAsync();
-			await PutAsync(userId);
-			await DeleteAsync(userId);
+			Authenticate();
+			var getResponse = await Client.GetAsync("/User").GetResponseAsyncAs<GetUserResponse>();
+
+			getResponse.Should().NotBeNull();
+
+			getResponse!.Login.Should().Be(Seeder.AdminUser.Login);
+			getResponse!.Name.Should().Be(Seeder.AdminUser.Name);
+			getResponse!.Surname.Should().Be(Seeder.AdminUser.Surname);
+			getResponse!.Phone.Should().Be(Seeder.AdminUser.Phone);
 		}
 
 		/// <summary>
-		/// Регистрация
+		/// Должен создать пользователя, когда запрос валиден
 		/// </summary>
-		/// <returns>Идентификатор пользователя</returns>
-		private async Task<int> SignUpAsync()
+		[Fact]
+		public async Task SignUpAsync_ShouldCreateUser_WhenRequestValid()
 		{
 			var signUpResponse = await Client.PostAsJsonAsync("/User/SignUp", new SignUpUserCommand
 			{
-				Login = "test",
-				Password = "test",
-				Name = "test",
-				Surname = "test",
+				Login = "Login",
+				Password = "Password",
+				Name = "Name",
+				Surname = "Surname",
 				Phone = "88005553535",
 			})
-			.GetResponseAsyncAs<SignUpUserResponse>();
+				.GetResponseAsyncAs<SignUpUserResponse>();
 
 			signUpResponse.Should().NotBeNull();
 
-			return signUpResponse.UserId;
+			var createdUser = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == signUpResponse.UserId);
+
+			createdUser.Should().NotBeNull();
+			createdUser!.Login.Should().Be("Login");
+			createdUser!.Name.Should().Be("Name");
+			createdUser!.Surname.Should().Be("Surname");
+			createdUser!.Phone.Should().Be("88005553535");
+
+			UserService.VerifyPasswordHash("Password", createdUser.PasswordHash, createdUser.PasswordSalt)
+				.Should().BeTrue();
 		}
 
 		/// <summary>
-		/// Аутентификация
+		/// Должен создать правильный токен, когда запрос валиден
 		/// </summary>
-		private async Task SignInAsync()
+		[Fact]
+		public async Task SignInAsync_ShouldCreateValidToken_WhenRequestValid()
 		{
 			var signInResponse = await Client.PostAsJsonAsync("/User/SignIn", new SignInUserCommand
 			{
-				Login = "test",
-				Password = "test",
+				Login = Seeder.AdminUser.Login,
+				Password = "AdminPassword",
 			})
-			.GetResponseAsyncAs<SignInUserResponse>();
+				.GetResponseAsyncAs<SignInUserResponse>();
 
 			signInResponse.Should().NotBeNull();
+			signInResponse.Token.Should().NotBeNullOrWhiteSpace();
+
+			var decodedToken = new JwtSecurityTokenHandler().ReadJwtToken(signInResponse.Token);
+
+			var nameClaimValue = decodedToken.Claims
+				.First(x => x.Type == ClaimTypes.Name)
+				.Value;
+
+			nameClaimValue.Should().Be(Seeder.AdminUser.Login);
 
 			Authenticate(signInResponse.Token);
 		}
 
 		/// <summary>
-		/// Получение данных о пользователе
+		/// Должен обновить данные о пользователе, когда запрос валиден
 		/// </summary>
-		private async Task GetAsync()
+		[Fact]
+		public async Task PutAsync_ShouldUpdateUser_WhenRequestValid()
 		{
-			var getResponse = await Client.GetAsync("/User").GetResponseAsyncAs<GetUserResponse>();
-
-			getResponse.Should().NotBeNull();
-
-			getResponse!.Login.Should().Be("test");
-			getResponse!.Name.Should().Be("test");
-			getResponse!.Surname.Should().Be("test");
-			getResponse!.Phone.Should().Be("88005553535");
-		}
-
-		/// <summary>
-		/// Обновление данных о пользователе
-		/// </summary>
-		private async Task PutAsync(int userId)
-		{
+			Authenticate();
 			var putResponse = await Client.PutAsJsonAsync("/User", new PutUserCommand
 			{
-				Name = "test2",
-				Surname = "test2",
+				Name = "Name2",
+				Surname = "Surname2",
 				Phone = "880055535352",
 			});
 
 			putResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-			var updatedUser = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+			DbContext.ChangeTracker.Clear();
+			var updatedUser = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == Seeder.AdminUser.Id);
 
 			updatedUser.Should().NotBeNull();
-			updatedUser!.Name.Should().Be("test2");
-			updatedUser!.Surname.Should().Be("test2");
+			updatedUser!.Name.Should().Be("Name2");
+			updatedUser!.Surname.Should().Be("Surname2");
 			updatedUser!.Phone.Should().Be("880055535352");
 		}
 
-		/// <summary>
-		/// Удаление пользователя
+		// <summary>
+		/// Должен удалить пользователя, когда он существует
 		/// </summary>
-		private async Task DeleteAsync(int userId)
+		[Fact]
+		public async Task DeleteAsync_ShouldDeleteUser_WhenHeExists()
 		{
+			Authenticate();
 			var deleteResponse = await Client.DeleteAsync("/User");
 
 			deleteResponse.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-			var deletedUser = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+			var deletedUser = await DbContext.Users.FirstOrDefaultAsync(x => x.Id == Seeder.AdminUser.Id);
 
 			deletedUser.Should().BeNull();
 		}

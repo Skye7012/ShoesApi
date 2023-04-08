@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShoesApi.Entities;
 using ShoesApi.Entities.ShoeSimpleFilters;
+using File = ShoesApi.Entities.File;
 
 namespace ShoesApi
 {
@@ -63,6 +64,10 @@ namespace ShoesApi
 		/// </summary>
 		public virtual DbSet<OrderItem> OrderItems { get; set; } = default!;
 
+		/// <summary>
+		/// Части заказов
+		/// </summary>
+		public virtual DbSet<File> Files { get; set; } = default!;
 
 		/// <inheritdoc/>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

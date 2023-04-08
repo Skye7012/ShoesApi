@@ -5,7 +5,7 @@ using ShoesApi.CQRS.Commands.UserCommands.PutUser;
 using ShoesApi.Exceptions;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.UserRequests.PutUser
+namespace ShoesApi.UnitTests.Requests.UserRequests
 {
 	/// <summary>
 	/// Тест для <see cref="PutUserCommandHandler"/>
