@@ -1,6 +1,4 @@
-﻿using ShoesApi.CQRS.Queries;
-
-namespace ShoesApi.CQRS.Queries.Season.GetSeasons
+﻿namespace ShoesApi.CQRS.Queries.Season.GetSeasons
 {
 	/// <summary>
 	/// Ответ на <see cref="GetSeasonsQuery"/>

@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using System.Text;
+using HostInitActions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Minio.AspNetCore;
 using ShoesApi.Filters;
 using ShoesApi.Services;
 using Swashbuckle.AspNetCore.Filters;
@@ -24,6 +26,7 @@ namespace ShoesApi.Configurators
 			builder.Services.AddControllers(opt =>
 				{
 					opt.Filters.Add<VoidAndTaskTo204NoContentFilter>();
+					opt.SuppressAsyncSuffixInActionNames = false;
 				});
 
 			builder.Services.AddEndpointsApiExplorer()
@@ -34,7 +37,8 @@ namespace ShoesApi.Configurators
 				.AddAuthorization(builder.Configuration)
 				.AddScoped<IUserService, UserService>()
 				.AddSingleton<IDateTimeProvider, DateTimeProvider>()
-				.AddDatabase(builder.Configuration);
+				.AddDatabase(builder.Configuration)
+				.AddS3Storage(builder.Configuration);
 		}
 
 		/// <summary>
@@ -75,7 +79,7 @@ namespace ShoesApi.Configurators
 						{
 							ValidateIssuerSigningKey = true,
 							IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-								.GetBytes(configurationManager.GetSection("AppSettings:Token").Value)),
+								.GetBytes(configurationManager.GetSection("AppSettings:Token").Value!)),
 							ValidateIssuer = false,
 							ValidateAudience = false
 						};
@@ -90,12 +94,32 @@ namespace ShoesApi.Configurators
 		/// <param name="configurationManager">Менеджер конфигурации приложения</param>
 		private static IServiceCollection AddDatabase(this IServiceCollection services, ConfigurationManager configurationManager)
 		{
-			var connString = configurationManager.GetConnectionString("ShoesDb");
+			var connString = configurationManager.GetConnectionString("ShoesDb")!;
 			return services.AddDbContext<ShoesDbContext>(opt =>
 				{
 					opt.UseNpgsql(connString);
 					opt.UseSnakeCaseNamingConvention();
 				});
+		}
+
+		/// <summary>
+		/// Сконфигурировать хранилище S3
+		/// </summary>
+		/// <param name="services">Сервисы</param>
+		/// <param name="configurationManager">Менеджер конфигурации приложения</param>
+		private static IServiceCollection AddS3Storage(this IServiceCollection services, ConfigurationManager configurationManager)
+		{
+			var connString = new Uri(configurationManager.GetConnectionString("S3")!);
+			services.AddMinio(connString);
+
+			services.AddTransient<IS3Service, S3Service>();
+			services.AddAsyncServiceInitialization()
+				.AddInitAction<IS3Service>(async (service) =>
+				{
+					await service.InitializeStorageAsync();
+				});
+
+			return services;
 		}
 	}
 }

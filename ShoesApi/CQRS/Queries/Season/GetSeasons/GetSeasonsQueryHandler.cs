@@ -14,7 +14,7 @@ namespace ShoesApi.CQRS.Queries.Season.GetSeasons
 		/// Конструктор
 		/// </summary>
 		/// <param name="context">Контекст БД</param>
-		public GetSeasonsQueryHandler(ShoesDbContext context) 
+		public GetSeasonsQueryHandler(ShoesDbContext context)
 			=> _context = context;
 
 		/// <inheritdoc/>
@@ -27,11 +27,11 @@ namespace ShoesApi.CQRS.Queries.Season.GetSeasons
 					Name = x.Name,
 				});
 
-			var count = await query.CountAsync();
+			var count = await query.CountAsync(cancellationToken);
 
 			var brands = await query
 				.OrderBy(x => x.Name)
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 			return new GetSeasonsResponse()
 			{

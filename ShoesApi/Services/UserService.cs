@@ -27,7 +27,7 @@ namespace ShoesApi.Services
 		public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
 		{
 			using var hmac = new HMACSHA512();
-			
+
 			passwordSalt = hmac.Key;
 			passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 		}
@@ -41,7 +41,7 @@ namespace ShoesApi.Services
 			};
 
 			var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-				_configuration.GetSection("AppSettings:Token").Value));
+				_configuration.GetSection("AppSettings:Token").Value!));
 
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -70,7 +70,7 @@ namespace ShoesApi.Services
 		public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
 		{
 			using var hmac = new HMACSHA512(passwordSalt);
-			
+
 			var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 			return computedHash.SequenceEqual(passwordHash);
 		}

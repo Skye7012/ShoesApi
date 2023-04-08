@@ -21,6 +21,6 @@ namespace ShoesApi.CQRS.Queries.Sizes.GetSizes
 		public async Task<List<int>> Handle(GetSizesQuery request, CancellationToken cancellationToken)
 			=> await _context.Sizes
 				.Select(x => x.RuSize)
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 	}
 }

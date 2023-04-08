@@ -29,7 +29,7 @@ namespace ShoesApi.CQRS.Queries.Order.GetOrders
 		{
 			var login = _userService.GetLogin();
 			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == login)
+				.FirstOrDefaultAsync(x => x.Login == login, cancellationToken)
 				?? throw new UserNotFoundException(login);
 
 			var query = _context.Orders
@@ -48,7 +48,7 @@ namespace ShoesApi.CQRS.Queries.Order.GetOrders
 						Shoe = new GetOrdersResponseItemOrderItemShoe()
 						{
 							Id = i.Shoe!.Id,
-							Image = i.Shoe!.Image,
+							ImageFileId = i.Shoe!.ImageFileId,
 							Name = i.Shoe!.Name,
 							Price = i.Shoe!.Price,
 						}
@@ -56,8 +56,8 @@ namespace ShoesApi.CQRS.Queries.Order.GetOrders
 					.ToList()
 				});
 
-			var orders = await query.ToListAsync();
-			var count = await query.CountAsync();
+			var orders = await query.ToListAsync(cancellationToken);
+			var count = await query.CountAsync(cancellationToken);
 
 			return new GetOrdersResponse()
 			{

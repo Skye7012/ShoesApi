@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Minio;
+using Minio.AspNetCore;
 using Npgsql;
 using NSubstitute;
 using ShoesApi.Services;
+using Testcontainers.Minio;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -23,18 +26,27 @@ namespace ShoesApi.IntegrationTests
 	public class IntegrationTestFactory<TProgram, TDbContext> : WebApplicationFactory<TProgram>, IAsyncLifetime
 		where TProgram : class where TDbContext : DbContext
 	{
-		private readonly PostgreSqlContainer _container;
+		private readonly PostgreSqlContainer _dbContainer;
+		private readonly MinioContainer _s3Container;
 
 		/// <summary>
 		/// Конструктор
 		/// </summary>
 		public IntegrationTestFactory()
 		{
-			_container = new PostgreSqlBuilder()
+			_dbContainer = new PostgreSqlBuilder()
+				.WithName("test_db")
 				.WithDatabase("test_db")
 				.WithUsername("postgres")
 				.WithPassword("postgres")
 				.WithImage("postgres:14")
+				.WithCleanUp(true)
+				.Build();
+
+			_s3Container = new MinioBuilder()
+				.WithName("test_minio")
+				.WithUsername("MinioUser")
+				.WithPassword("MinioPassword")
 				.WithCleanUp(true)
 				.Build();
 		}
@@ -50,24 +62,33 @@ namespace ShoesApi.IntegrationTests
 			builder.ConfigureTestServices(services =>
 			{
 				services.RemoveDbContext<TDbContext>();
-				services.AddDbContext<TDbContext>(options => { options.UseNpgsql(_container.GetConnectionString()); });
+				services.AddDbContext<TDbContext>(options => { options.UseNpgsql(_dbContainer.GetConnectionString()); });
 				services.EnsureDbCreated<TDbContext>();
 
+				services.RemoveAll<MinioClient>();
+				services.AddMinio(new Uri($"s3://MinioUser:MinioPassword@localhost:{_s3Container.GetMappedPublicPort(9000)}"));
+
 				services.RemoveAll<IDateTimeProvider>();
-				services.AddSingleton<IDateTimeProvider>(GetDateTimeProviderMock());
+				services.AddSingleton(GetDateTimeProviderMock());
 			});
 		}
 
 		/// <inheritdoc/>
 		public async Task InitializeAsync()
 		{
-			await _container.StartAsync();
-			DbConnection = new NpgsqlConnection(_container.GetConnectionString());
+			await _dbContainer.StartAsync();
+			DbConnection = new NpgsqlConnection(_dbContainer.GetConnectionString());
 			await DbConnection.OpenAsync();
+
+			await _s3Container.StartAsync();
 		}
 
 		/// <inheritdoc/>
-		public new async Task DisposeAsync() => await _container.DisposeAsync();
+		public new async Task DisposeAsync()
+		{
+			await _dbContainer.DisposeAsync();
+			await _s3Container.DisposeAsync();
+		}
 
 		/// <summary>
 		/// Получить мок <see cref="IDateTimeProvider"/>

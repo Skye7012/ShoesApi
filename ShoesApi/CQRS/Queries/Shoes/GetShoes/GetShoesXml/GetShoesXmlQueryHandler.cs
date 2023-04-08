@@ -28,7 +28,7 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml
 				{
 					Id = x.Id,
 					Name = x.Name,
-					Image = x.Image,
+					ImageFileId = x.ImageFileId,
 					Price = x.Price,
 					Brand = new GetShoesResponseItemBrand()
 					{
@@ -47,7 +47,7 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml
 					},
 					RuSizes = x.Sizes!.Select(x => x.RuSize).ToList(),
 				})
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 			var response = new GetShoesResponse()
 			{

@@ -33,7 +33,7 @@ namespace ShoesApi.InitialData
 		/// <summary>
 		/// Начальные Сезоны обуви
 		/// </summary>
-		public static readonly List<Season> Seasons = new ()
+		public static readonly List<Season> Seasons = new()
 		{
 			new Season { Id = 1, Name = "Лето" },
 			new Season { Id = 2, Name = "Демисезон" },

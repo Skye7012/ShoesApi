@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.CQRS.Queries.Shoes.GetShoes;
 
 namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds
 {
@@ -26,7 +25,7 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds
 				{
 					Id = x.Id,
 					Name = x.Name,
-					Image = x.Image,
+					ImageFileId = x.ImageFileId,
 					Price = x.Price,
 					Brand = new GetShoesResponseItemBrand()
 					{
@@ -49,10 +48,10 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds
 			query = query
 				.Where(x => request.Ids.Contains(x.Id));
 
-			var count = await query.CountAsync();
+			var count = await query.CountAsync(cancellationToken);
 
 			var shoes = await query
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 
 			return new GetShoesResponse()

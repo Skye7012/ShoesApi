@@ -33,7 +33,7 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 		{
 			var login = _userService.GetLogin();
 			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == login)
+				.FirstOrDefaultAsync(x => x.Login == login, cancellationToken)
 				?? throw new UserNotFoundException(login);
 
 			if (!IsOrderItemsUnique(request))
@@ -41,11 +41,11 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 
 			var shoes = await _context.Shoes
 				.Where(x => request.OrderItems.Select(x => x.ShoeId).Contains(x.Id))
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 			var sizes = await _context.Sizes
 				.Where(x => request.OrderItems.Select(x => x.RuSize).Contains(x.RuSize))
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 			var orderItems = request.OrderItems
 				.Select(x => new OrderItem()
@@ -67,8 +67,8 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 				OrderItems = orderItems,
 			};
 
-			await _context.AddAsync(order);
-			await _context.SaveChangesAsync();
+			await _context.AddAsync(order, cancellationToken);
+			await _context.SaveChangesAsync(cancellationToken);
 
 			return order.Id;
 		}

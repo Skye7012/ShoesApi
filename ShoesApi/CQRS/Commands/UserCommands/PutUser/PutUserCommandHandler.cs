@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.Entities;
 using ShoesApi.Exceptions;
 using ShoesApi.Services;
 
@@ -30,7 +29,7 @@ namespace ShoesApi.CQRS.Commands.UserCommands.PutUser
 		{
 			var login = _userService.GetLogin();
 			var user = await _context.Users
-				.FirstOrDefaultAsync(x => x.Login == login)
+				.FirstOrDefaultAsync(x => x.Login == login, cancellationToken)
 				?? throw new UserNotFoundException(login);
 
 			if (request.Name != null)
@@ -40,7 +39,7 @@ namespace ShoesApi.CQRS.Commands.UserCommands.PutUser
 			if (request.Phone != null)
 				user.Phone = request.Phone;
 
-			await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

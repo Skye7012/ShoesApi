@@ -1,12 +1,12 @@
-﻿using Xunit;
-using ShoesApi.Controllers;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using ShoesApi.CQRS.Queries.Shoes.GetShoes;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.Extensions.Primitives;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
+using ShoesApi.Controllers;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes;
+using Xunit;
 
 namespace ShoesApi.IntegrationTests.Controllers
 {
@@ -27,7 +27,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 		/// Возвращает коллекцию обуви, когда она существует
 		/// </summary>
 		[Fact]
-		public async Task Get_ReturnsShoes_WhenTheyExist()
+		public async Task GetAsync_ReturnsShoes_WhenTheyExist()
 		{
 			var shoes = await Seeder.SeedShoesAsync();
 			var shoe = shoes.First();
@@ -41,7 +41,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 
 			var responseShoe = response.Items!.First();
 			responseShoe.Name.Should().Be(shoe.Name);
-			responseShoe.Image.Should().Be(shoe.Image);
+			responseShoe.ImageFileId.Should().Be(shoe.ImageFileId);
 			responseShoe.Price.Should().Be(shoe.Price);
 			responseShoe.Brand.Id.Should().Be(shoe.BrandId);
 			responseShoe.Destination.Id.Should().Be(shoe.DestinationId);
@@ -53,7 +53,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 		/// Возвращает коллекцию обуви по идентификаторам, которые существуют
 		/// </summary>
 		[Fact]
-		public async Task GetByIds_ReturnsShoes_ThatExists()
+		public async Task GetByIdsAsync_ReturnsShoes_ThatExists()
 		{
 			var shoes = await Seeder.SeedShoesAsync();
 			var shoe = shoes.First(x => x.Id == 1);
@@ -73,7 +73,7 @@ namespace ShoesApi.IntegrationTests.Controllers
 
 			var responseShoe = Assert.Single(response.Items);
 			responseShoe.Name.Should().Be(shoe.Name);
-			responseShoe.Image.Should().Be(shoe.Image);
+			responseShoe.ImageFileId.Should().Be(shoe.ImageFileId);
 			responseShoe.Price.Should().Be(shoe.Price);
 			responseShoe.Brand.Id.Should().Be(shoe.BrandId);
 			responseShoe.Destination.Id.Should().Be(shoe.DestinationId);

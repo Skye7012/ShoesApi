@@ -6,7 +6,7 @@ using ShoesApi.CQRS.Queries.Brand.GetBrands;
 using ShoesApi.Entities.ShoeSimpleFilters;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.BrandRequests.GetBrands
+namespace ShoesApi.UnitTests.Requests.BrandRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetBrandsQueryHandler"/>

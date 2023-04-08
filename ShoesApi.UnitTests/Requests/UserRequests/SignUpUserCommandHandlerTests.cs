@@ -5,7 +5,7 @@ using ShoesApi.CQRS.Commands.UserCommands.SignUpUser;
 using ShoesApi.Exceptions;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.UserRequests.SignUpUser
+namespace ShoesApi.UnitTests.Requests.UserRequests
 {
 	/// <summary>
 	/// Тест для <see cref="SignUpUserCommandHandler"/>

@@ -27,11 +27,11 @@ namespace ShoesApi.CQRS.Queries.Destination.GetDestinations
 					Name = x.Name,
 				});
 
-			var count = await query.CountAsync();
+			var count = await query.CountAsync(cancellationToken);
 
 			var brands = await query
 				.OrderBy(x => x.Name)
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 			return new GetDestinationsResponse()
 			{

@@ -3,25 +3,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using ShoesApi.CQRS.Queries.Shoes.GetShoes;
+using ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds;
 using ShoesApi.Entities;
 using ShoesApi.Entities.ShoeSimpleFilters;
 using Xunit;
 
-namespace ShoesApi.UnitTests.Requests.ShoeRequests.GetShoes
+namespace ShoesApi.UnitTests.Requests.ShoesRequests
 {
 	/// <summary>
 	/// Тест для <see cref="GetShoesQueryHandler"/>
 	/// </summary>
-	public class GetShoesQueryHandlerTests : UnitTestBase
+	public class GetShoesByIdsQueryHandlerTests : UnitTestBase
 	{
+		private readonly File _imageFile;
 		private readonly List<Size> _sizes;
 		private readonly List<Shoe> _shoes;
 
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public GetShoesQueryHandlerTests()
+		public GetShoesByIdsQueryHandlerTests()
 		{
+			_imageFile = new File("test");
+
 			_sizes = new List<Size>
 			{
 				new Size { RuSize = 40 },
@@ -32,8 +36,9 @@ namespace ShoesApi.UnitTests.Requests.ShoeRequests.GetShoes
 			{
 				new Shoe
 				{
+					Id = 1,
 					Name = "Sneakers",
-					Image = "image.png",
+					ImageFile = _imageFile,
 					Price = 100,
 					Brand = new Brand { Name = "Adidas" },
 					Destination = new Destination { Name = "Sport" },
@@ -42,8 +47,9 @@ namespace ShoesApi.UnitTests.Requests.ShoeRequests.GetShoes
 				},
 				new Shoe
 				{
+					Id = 2,
 					Name = "Boots",
-					Image = "boots_image.png",
+					ImageFile = _imageFile,
 					Price = 200,
 					Brand = new Brand { Name = "Dr. Martens" },
 					Destination = new Destination { Name = "Everyday" },
@@ -65,8 +71,8 @@ namespace ShoesApi.UnitTests.Requests.ShoeRequests.GetShoes
 				c.SaveChanges();
 			});
 
-			var handler = new GetShoesQueryHandler(context);
-			var result = await handler.Handle(new GetShoesQuery(), default);
+			var handler = new GetShoesByIdsQueryHandler(context);
+			var result = await handler.Handle(new GetShoesByIdsQuery(new int[] { 1, 2 }), default);
 
 			result.TotalCount.Should().Be(2);
 			result.Items.Should().NotBeNullOrEmpty();
@@ -75,7 +81,7 @@ namespace ShoesApi.UnitTests.Requests.ShoeRequests.GetShoes
 			var resultFirstShoe = result.Items!.First(x => x.Id == firstShoe.Id);
 
 			resultFirstShoe.Name.Should().Be(firstShoe.Name);
-			resultFirstShoe.Image.Should().Be(firstShoe.Image);
+			resultFirstShoe.ImageFileId.Should().Be(firstShoe.ImageFileId);
 			resultFirstShoe.Price.Should().Be(firstShoe.Price);
 
 			resultFirstShoe.Brand.Id.Should().Be(firstShoe.Brand!.Id);
@@ -84,7 +90,7 @@ namespace ShoesApi.UnitTests.Requests.ShoeRequests.GetShoes
 			resultFirstShoe.Season.Name.Should().Be(firstShoe.Season!.Name);
 			resultFirstShoe.Destination.Id.Should().Be(firstShoe.Destination!.Id);
 			resultFirstShoe.Destination.Name.Should().Be(firstShoe.Destination!.Name);
-			
+
 			resultFirstShoe.RuSizes.Should().Equal(firstShoe.Sizes!.Select(x => x.RuSize).ToList());
 		}
 	}

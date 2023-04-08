@@ -22,6 +22,28 @@ namespace ShoesApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ShoesApi.Entities.File", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_files");
+
+                    b.ToTable("files", (string)null);
+
+                    b.HasComment("Файлы");
+                });
+
             modelBuilder.Entity("ShoesApi.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -119,11 +141,9 @@ namespace ShoesApi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("destination_id");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image")
-                        .HasComment("Название изображения (для пути)");
+                    b.Property<int>("ImageFileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("image_file_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -148,9 +168,8 @@ namespace ShoesApi.Migrations
                     b.HasIndex("DestinationId")
                         .HasDatabaseName("ix_shoes_destination_id");
 
-                    b.HasIndex("Image")
-                        .IsUnique()
-                        .HasDatabaseName("ix_shoes_image");
+                    b.HasIndex("ImageFileId")
+                        .HasDatabaseName("ix_shoes_image_file_id");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -479,6 +498,13 @@ namespace ShoesApi.Migrations
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("fk_shoes_destinations_destination_id");
 
+                    b.HasOne("ShoesApi.Entities.File", "ImageFile")
+                        .WithMany("Shoes")
+                        .HasForeignKey("ImageFileId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_shoes_files_image_file_id");
+
                     b.HasOne("ShoesApi.Entities.ShoeSimpleFilters.Season", "Season")
                         .WithMany("Shoes")
                         .HasForeignKey("SeasonId")
@@ -488,6 +514,8 @@ namespace ShoesApi.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Destination");
+
+                    b.Navigation("ImageFile");
 
                     b.Navigation("Season");
                 });
@@ -507,6 +535,11 @@ namespace ShoesApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_shoes_sizes_sizes_sizes_id");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.File", b =>
+                {
+                    b.Navigation("Shoes");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Order", b =>

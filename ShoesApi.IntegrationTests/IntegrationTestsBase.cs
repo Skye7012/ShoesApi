@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.IO;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,10 +26,11 @@ namespace ShoesApi.IntegrationTests
 			_factory = factory;
 			Client = factory.CreateClient();
 			DbContext = factory.Services.CreateScope()
-				.ServiceProvider.GetService<ShoesDbContext>()!;
+				.ServiceProvider.GetRequiredService<ShoesDbContext>();
+			S3Service = factory.Services.GetRequiredService<IS3Service>();
 			UserService = factory.Services.CreateScope()
-				.ServiceProvider.GetService<IUserService>()!;
-			DateTimeProvider = factory.Services.GetService<IDateTimeProvider>()!;
+				.ServiceProvider.GetRequiredService<IUserService>();
+			DateTimeProvider = factory.Services.GetRequiredService<IDateTimeProvider>();
 
 			Seeder = new IntegrationTestSeeder(DbContext, UserService);
 		}
@@ -42,6 +44,11 @@ namespace ShoesApi.IntegrationTests
 		/// Контекст БД
 		/// </summary>
 		protected ShoesDbContext DbContext { get; }
+
+		/// <summary>
+		/// Хранилище S3
+		/// </summary>
+		protected IS3Service S3Service { get; }
 
 		/// <summary>
 		/// Сервис пользователя
@@ -63,11 +70,16 @@ namespace ShoesApi.IntegrationTests
 		/// </summary>
 		public IDateTimeProvider DateTimeProvider { get; private set; }
 
+		/// <summary>
+		/// Тестовый поток для <see cref="S3Service"/>
+		/// </summary>
+		protected MemoryStream S3ServiceTestStream { get; } = new MemoryStream(new byte[] { 1, 2 });
+
 		/// <inheritdoc/>
 		public async Task DisposeAsync()
 		{
 			await Respawner.ResetAsync(_factory.DbConnection);
-			
+
 			await Seeder.ReseedInitialDataAsync();
 		}
 
@@ -89,7 +101,7 @@ namespace ShoesApi.IntegrationTests
 		/// Аутентифицироваться
 		/// </summary>
 		/// <param name="token">Токен аутентификации</param>
-		protected void Authenticate(string? token = null) 
+		protected void Authenticate(string? token = null)
 			=> Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
 				"bearer",
 				token ?? UserService.CreateToken(Seeder.AdminUser));
