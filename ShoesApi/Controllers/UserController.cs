@@ -59,6 +59,7 @@ namespace ShoesApi.Controllers
 		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Authorization token</returns>
 		[HttpPost("SignIn")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<SignInUserResponse> SignInAsync(

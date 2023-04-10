@@ -20,7 +20,7 @@ namespace ShoesApi.CQRS.Commands.OrderCommands.PostOrder
 		/// </summary>
 		/// <param name="context">Контекст БД</param>
 		/// <param name="userService">Сервис пользовательских данных</param>
-		/// <param name="dateTimeProvider"></param>
+		/// <param name="dateTimeProvider">Провайдер даты и времени</param>
 		public PostOrderCommandHandler(ShoesDbContext context, IUserService userService, IDateTimeProvider dateTimeProvider)
 		{
 			_context = context;

@@ -56,13 +56,12 @@ namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesXml
 			};
 
 			var xmlSerializer = new XmlSerializer(response.GetType());
-
 			using var textWriter = new StringWriter();
 			xmlSerializer.Serialize(textWriter, response);
 
 			var fileName = "shoes.xml";
 			var mimeType = "text/xml";
-			var stream = new MemoryStream(Encoding.ASCII.GetBytes(textWriter.ToString()));
+			var stream = new MemoryStream(Encoding.UTF8.GetBytes(textWriter.ToString()));
 
 			return new FileStreamResult(stream, mimeType)
 			{

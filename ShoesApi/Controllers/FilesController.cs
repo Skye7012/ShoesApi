@@ -28,6 +28,7 @@ namespace ShoesApi.Controllers
 		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Файл</returns>
 		[HttpGet("Download/{id}")]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<FileStreamResult> DownloadAsync(
 			int id,
 			CancellationToken cancellationToken)
@@ -40,6 +41,7 @@ namespace ShoesApi.Controllers
 		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Идентификатор файла</returns>
 		[HttpPost("Upload")]
+		[ProducesResponseType(StatusCodes.Status201Created)]
 		public async Task<int> UploadAsync(
 			IFormFile file,
 			CancellationToken cancellationToken)
