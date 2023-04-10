@@ -11,3 +11,17 @@ var app = builder.Build();
 app.ConfigureWebApp();
 
 app.Run();
+
+
+
+
+
+
+
+
+
+
+/// <summary>
+/// Для интеграционных тестов
+/// </summary>
+public partial class Program { }

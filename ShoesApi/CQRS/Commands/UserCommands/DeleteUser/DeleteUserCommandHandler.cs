@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ShoesApi.Entities;
 using ShoesApi.Exceptions;
 using ShoesApi.Services;
 

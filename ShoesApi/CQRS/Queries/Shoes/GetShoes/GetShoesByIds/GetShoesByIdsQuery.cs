@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using ShoesApi.CQRS.Queries.Shoes.GetShoes;
 
 namespace ShoesApi.CQRS.Queries.Shoes.GetShoes.GetShoesByIds
 {

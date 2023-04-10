@@ -16,9 +16,9 @@
 		public string Name { get; set; } = default!;
 
 		/// <summary>
-		/// Путь для изображения // TODO: change
+		/// Идентификатор файла изображения
 		/// </summary>
-		public string Image { get; set; } = default!;
+		public int ImageFileId { get; set; }
 
 		/// <summary>
 		/// Цена

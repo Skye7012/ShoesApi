@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using NSubstitute;
@@ -15,29 +17,41 @@ namespace ShoesApi.UnitTests
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public UnitTestBase()
+		protected UnitTestBase()
 		{
 			UserService = new TestUserService();
 			DateTimeProvider = Substitute.For<IDateTimeProvider>();
+			S3Service = Substitute.For<IS3Service>();
 
 			ConfigureDateTimeProvider();
+			ConfigureS3Service();
 		}
 
 		/// <summary>
 		/// Сервис пользователя для тестов
 		/// </summary>
-		public TestUserService UserService { get; private set; }
+		protected TestUserService UserService { get; }
 
 		/// <summary>
 		/// Провайдер времени
 		/// </summary>
-		public IDateTimeProvider DateTimeProvider { get; private set; }
+		protected IDateTimeProvider DateTimeProvider { get; }
+
+		/// <summary>
+		/// Хранилище S3
+		/// </summary>
+		protected IS3Service S3Service { get; }
+
+		/// <summary>
+		/// Тестовый поток для <see cref="S3Service"/>
+		/// </summary>
+		protected Stream S3ServiceTestStream { get; } = new MemoryStream(new byte[] { 1, 2 });
 
 		/// <summary>
 		/// Создать контекст БД
 		/// </summary>
 		/// <returns>Контекст БД</returns>
-		public ShoesDbContext CreateInMemoryContext(Action<ShoesDbContext>? seedActions = null)
+		protected ShoesDbContext CreateInMemoryContext(Action<ShoesDbContext>? seedActions = null)
 		{
 			var context = new ShoesDbContext(new DbContextOptionsBuilder<ShoesDbContext>()
 				.UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -47,8 +61,7 @@ namespace ShoesApi.UnitTests
 			// Инициализация начальных данных
 			context.Users.Add(UserService.AdminUser);
 
-			if (seedActions != null)
-				seedActions(context);
+			seedActions?.Invoke(context);
 
 			context.SaveChanges();
 			context.ChangeTracker.Clear();
@@ -64,6 +77,15 @@ namespace ShoesApi.UnitTests
 				.Returns(DateTime.SpecifyKind(
 					new DateTime(2020, 01, 01),
 					DateTimeKind.Utc));
+		}
+
+		/// <summary>
+		/// Сконфигурировать <see cref="S3Service"/>
+		/// </summary>
+		private void ConfigureS3Service()
+		{
+			S3Service.DownloadAsync(Arg.Any<string>(), default)
+				.Returns(Task.FromResult(S3ServiceTestStream));
 		}
 	}
 }

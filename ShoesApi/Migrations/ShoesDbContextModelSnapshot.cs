@@ -22,7 +22,7 @@ namespace ShoesApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ShoesApi.Entities.Brand", b =>
+            modelBuilder.Entity("ShoesApi.Entities.File", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,41 +37,11 @@ namespace ShoesApi.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_brands");
+                        .HasName("pk_files");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_brands_name");
+                    b.ToTable("files", (string)null);
 
-                    b.ToTable("brands", (string)null);
-
-                    b.HasComment("Брэнды");
-                });
-
-            modelBuilder.Entity("ShoesApi.Entities.Destination", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_destinations");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_destinations_name");
-
-                    b.ToTable("destinations", (string)null);
-
-                    b.HasComment("Назначение обуви");
+                    b.HasComment("Файлы");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Order", b =>
@@ -154,32 +124,6 @@ namespace ShoesApi.Migrations
                     b.HasComment("Часть заказа");
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.Season", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_seasons");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_seasons_name");
-
-                    b.ToTable("seasons", (string)null);
-
-                    b.HasComment("Сезон");
-                });
-
             modelBuilder.Entity("ShoesApi.Entities.Shoe", b =>
                 {
                     b.Property<int>("Id")
@@ -197,11 +141,9 @@ namespace ShoesApi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("destination_id");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image")
-                        .HasComment("Название изображения (для пути)");
+                    b.Property<int>("ImageFileId")
+                        .HasColumnType("integer")
+                        .HasColumnName("image_file_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -226,9 +168,8 @@ namespace ShoesApi.Migrations
                     b.HasIndex("DestinationId")
                         .HasDatabaseName("ix_shoes_destination_id");
 
-                    b.HasIndex("Image")
-                        .IsUnique()
-                        .HasDatabaseName("ix_shoes_image");
+                    b.HasIndex("ImageFileId")
+                        .HasDatabaseName("ix_shoes_image_file_id");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -240,6 +181,145 @@ namespace ShoesApi.Migrations
                     b.ToTable("shoes", (string)null);
 
                     b.HasComment("Обувь");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.ShoeSimpleFilters.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_brands");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_brands_name");
+
+                    b.ToTable("brands", (string)null);
+
+                    b.HasComment("Брэнды");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Nike"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Adidas"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Reebok"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Asics"
+                        });
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.ShoeSimpleFilters.Destination", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_destinations");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_destinations_name");
+
+                    b.ToTable("destinations", (string)null);
+
+                    b.HasComment("Назначение обуви");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Повседневность"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Баскетбол"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Волейбол"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Бег"
+                        });
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.ShoeSimpleFilters.Season", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_seasons");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_seasons_name");
+
+                    b.ToTable("seasons", (string)null);
+
+                    b.HasComment("Сезон");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Лето"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Демисезон"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Зима"
+                        });
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Size", b =>
@@ -265,6 +345,33 @@ namespace ShoesApi.Migrations
                     b.ToTable("sizes", (string)null);
 
                     b.HasComment("Размеры");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            RuSize = 38
+                        },
+                        new
+                        {
+                            Id = 2,
+                            RuSize = 39
+                        },
+                        new
+                        {
+                            Id = 3,
+                            RuSize = 40
+                        },
+                        new
+                        {
+                            Id = 4,
+                            RuSize = 41
+                        },
+                        new
+                        {
+                            Id = 5,
+                            RuSize = 42
+                        });
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.User", b =>
@@ -379,19 +486,26 @@ namespace ShoesApi.Migrations
 
             modelBuilder.Entity("ShoesApi.Entities.Shoe", b =>
                 {
-                    b.HasOne("ShoesApi.Entities.Brand", "Brand")
+                    b.HasOne("ShoesApi.Entities.ShoeSimpleFilters.Brand", "Brand")
                         .WithMany("Shoes")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("fk_shoes_brands_brand_id");
 
-                    b.HasOne("ShoesApi.Entities.Destination", "Destination")
+                    b.HasOne("ShoesApi.Entities.ShoeSimpleFilters.Destination", "Destination")
                         .WithMany("Shoes")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("fk_shoes_destinations_destination_id");
 
-                    b.HasOne("ShoesApi.Entities.Season", "Season")
+                    b.HasOne("ShoesApi.Entities.File", "ImageFile")
+                        .WithMany("Shoes")
+                        .HasForeignKey("ImageFileId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_shoes_files_image_file_id");
+
+                    b.HasOne("ShoesApi.Entities.ShoeSimpleFilters.Season", "Season")
                         .WithMany("Shoes")
                         .HasForeignKey("SeasonId")
                         .OnDelete(DeleteBehavior.ClientCascade)
@@ -400,6 +514,8 @@ namespace ShoesApi.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Destination");
+
+                    b.Navigation("ImageFile");
 
                     b.Navigation("Season");
                 });
@@ -421,12 +537,7 @@ namespace ShoesApi.Migrations
                         .HasConstraintName("fk_shoes_sizes_sizes_sizes_id");
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.Brand", b =>
-                {
-                    b.Navigation("Shoes");
-                });
-
-            modelBuilder.Entity("ShoesApi.Entities.Destination", b =>
+            modelBuilder.Entity("ShoesApi.Entities.File", b =>
                 {
                     b.Navigation("Shoes");
                 });
@@ -436,14 +547,24 @@ namespace ShoesApi.Migrations
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.Season", b =>
+            modelBuilder.Entity("ShoesApi.Entities.Shoe", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.ShoeSimpleFilters.Brand", b =>
                 {
                     b.Navigation("Shoes");
                 });
 
-            modelBuilder.Entity("ShoesApi.Entities.Shoe", b =>
+            modelBuilder.Entity("ShoesApi.Entities.ShoeSimpleFilters.Destination", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Shoes");
+                });
+
+            modelBuilder.Entity("ShoesApi.Entities.ShoeSimpleFilters.Season", b =>
+                {
+                    b.Navigation("Shoes");
                 });
 
             modelBuilder.Entity("ShoesApi.Entities.Size", b =>

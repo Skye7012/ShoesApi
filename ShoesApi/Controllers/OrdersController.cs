@@ -25,27 +25,31 @@ namespace ShoesApi.Controllers
 		/// <summary>
 		/// Получить заказы пользователя
 		/// </summary>
+		/// /// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Заказы пользователя</returns>
 		[HttpGet]
 		[Authorize]
-		public async Task<GetOrdersResponse> Get()
-			=> await _mediator.Send(new GetOrdersQuery());
+		public async Task<GetOrdersResponse> GetAsync(CancellationToken cancellationToken)
+			=> await _mediator.Send(new GetOrdersQuery(), cancellationToken);
 
 		/// <summary>
 		/// Создать заказ
 		/// </summary>
 		/// <param name="command">Команда</param>
+		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Идентификатор созданного заказа</returns>
 		[HttpPost]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<int>> Post(PostOrderCommand command)
+		public async Task<ActionResult<int>> PostAsync(
+			PostOrderCommand command,
+			CancellationToken cancellationToken)
 		{
-			var orderId = await _mediator.Send(command);
+			var orderId = await _mediator.Send(command, cancellationToken);
 
-			return CreatedAtAction(nameof(Get), orderId);
+			return CreatedAtAction(nameof(GetAsync), orderId);
 		}
 	}
 }

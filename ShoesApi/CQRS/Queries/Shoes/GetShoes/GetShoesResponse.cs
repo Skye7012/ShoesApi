@@ -1,6 +1,4 @@
-﻿using ShoesApi.CQRS.Queries.Shoes.GetShoes;
-
-namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
+﻿namespace ShoesApi.CQRS.Queries.Shoes.GetShoes
 {
 	/// <summary>
 	/// Ответ на <see cref="GetShoesQuery"/>

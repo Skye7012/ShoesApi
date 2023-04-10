@@ -34,7 +34,7 @@ namespace ShoesApi.Services
 		/// <param name="password">Пароль</param>
 		/// <param name="passwordHash">Хэш пароля</param>
 		/// <param name="passwordSalt">Соль пароля</param>
-		/// <returns></returns>
+		/// <returns>Валиден ли пароль</returns>
 		public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
 	}
 }

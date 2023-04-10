@@ -23,9 +23,10 @@ namespace ShoesApi.Controllers
 		/// <summary>
 		/// Получить список Брэндов обуви
 		/// </summary>
+		/// <param name="cancellationToken">Токен отмены</param>
 		/// <returns>Список Брэндов обуви</returns>
 		[HttpGet]
-		public async Task<GetBrandsResponse> Get()
-			=> await _mediator.Send(new GetBrandsQuery());
+		public async Task<GetBrandsResponse> GetAsync(CancellationToken cancellationToken)
+			=> await _mediator.Send(new GetBrandsQuery(), cancellationToken);
 	}
 }

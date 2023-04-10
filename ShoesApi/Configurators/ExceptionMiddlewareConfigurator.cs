@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using ShoesApi.Exceptions;
 
 namespace ShoesApi.Configurators
@@ -27,7 +28,7 @@ namespace ShoesApi.Configurators
 				if (exception is ApplicationExceptionBase applicationException)
 					context.Response.StatusCode = (int)applicationException.StatusCode;
 
-				var response = new Error(exception.Message);
+				var response = new ProblemDetails() { Detail = exception.Message };
 
 				await context.Response.WriteAsJsonAsync(response);
 			}));
