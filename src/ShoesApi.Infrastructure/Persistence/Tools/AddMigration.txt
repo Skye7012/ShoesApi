@@ -1,0 +1,1 @@
+Add-Migration {Name} -o Persistence/Migrations
