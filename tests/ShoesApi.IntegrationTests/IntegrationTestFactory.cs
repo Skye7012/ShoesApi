@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Minio;
 using Minio.AspNetCore;
 using Npgsql;
@@ -63,7 +64,6 @@ public class IntegrationTestFactory<TProgram, TDbContext> : WebApplicationFactor
 		{
 			services.RemoveDbContext<TDbContext>();
 			services.AddDbContext<TDbContext>(options => options.UseNpgsql(_dbContainer.GetConnectionString()));
-			services.EnsureDbCreated<TDbContext>();
 
 			services.RemoveAll<MinioClient>();
 			services.AddMinio(new Uri($"s3://MinioUser:MinioPassword@localhost:{_s3Container.GetMappedPublicPort(9000)}"));
@@ -71,6 +71,8 @@ public class IntegrationTestFactory<TProgram, TDbContext> : WebApplicationFactor
 			services.RemoveAll<IDateTimeProvider>();
 			services.AddSingleton(GetDateTimeProviderMock());
 		});
+
+		builder.UseEnvironment(Environments.Staging);
 	}
 
 	/// <inheritdoc/>
@@ -94,7 +96,7 @@ public class IntegrationTestFactory<TProgram, TDbContext> : WebApplicationFactor
 	/// Получить мок <see cref="IDateTimeProvider"/>
 	/// </summary>
 	/// <returns>Мок <see cref="IDateTimeProvider"/></returns>
-	private IDateTimeProvider GetDateTimeProviderMock()
+	private static IDateTimeProvider GetDateTimeProviderMock()
 	{
 		var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 

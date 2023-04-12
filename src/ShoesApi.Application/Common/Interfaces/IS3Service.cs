@@ -29,5 +29,7 @@ public interface IS3Service
 	/// Проверить существование бакета, и при отсутствии оного создать<br/>
 	/// Вызывается один раз при запуске веб приложения
 	/// </summary>
-	public Task InitializeStorageAsync();
+	/// <param name="cancellationToken">Токен отмены</param>
+	/// <returns>Существовал ли бакет</returns>
+	public Task<bool> InitializeStorageAsync(CancellationToken cancellationToken);
 }
