@@ -64,15 +64,19 @@ public class S3Service : IS3Service
 	}
 
 	/// <inheritdoc/>
-	public async Task InitializeStorageAsync()
+	public async Task<bool> InitializeStorageAsync(CancellationToken cancellationToken)
 	{
 		var isBucketCreated = await _minioClient.BucketExistsAsync(
 			new BucketExistsArgs()
-				.WithBucket(BucketName));
+				.WithBucket(BucketName),
+			cancellationToken);
 
 		if (!isBucketCreated)
 			await _minioClient.MakeBucketAsync(
 				new MakeBucketArgs()
-					.WithBucket(BucketName));
+					.WithBucket(BucketName),
+				cancellationToken);
+
+		return isBucketCreated;
 	}
 }

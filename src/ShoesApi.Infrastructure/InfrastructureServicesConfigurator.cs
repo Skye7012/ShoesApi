@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Minio.AspNetCore;
 using ShoesApi.Application.Common.Interfaces;
+using ShoesApi.Infrastructure.InitExecutors;
 using ShoesApi.Infrastructure.Persistence;
 using ShoesApi.Infrastructure.Services;
 
@@ -25,7 +26,8 @@ public static class InfrastructureServicesConfigurator
 		=> services
 			.AddAuthorization(configurationManager)
 			.AddDatabase(configurationManager)
-			.AddS3Storage(configurationManager);
+			.AddS3Storage(configurationManager)
+			.AddInitExecutors();
 
 	/// <summary>
 	/// Сконфигурировать сервисы авторизации
@@ -76,9 +78,18 @@ public static class InfrastructureServicesConfigurator
 		var connString = new Uri(configurationManager.GetConnectionString("S3")!);
 		services.AddMinio(connString);
 
-		services.AddTransient<IS3Service, S3Service>();
+		return services.AddTransient<IS3Service, S3Service>();
+	}
+
+	/// <summary>
+	/// Сконфигурировать инициализаторы сервисов
+	/// </summary>
+	/// <param name="services">Сервисы</param>
+	private static IServiceCollection AddInitExecutors(this IServiceCollection services)
+	{
 		services.AddAsyncServiceInitialization()
-			.AddInitAction<IS3Service>(async (service) => await service.InitializeStorageAsync());
+			.AddInitActionExecutor<DbInitExecutor>()
+			.AddInitActionExecutor<S3InitExecutor>();
 
 		return services;
 	}

@@ -30,13 +30,13 @@ public class GetSeasonsQueryHandler : IRequestHandler<GetSeasonsQuery, GetSeason
 
 		var count = await query.CountAsync(cancellationToken);
 
-		var brands = await query
+		var seasons = await query
 			.OrderBy(x => x.Name)
 			.ToListAsync(cancellationToken);
 
 		return new GetSeasonsResponse()
 		{
-			Items = brands,
+			Items = seasons,
 			TotalCount = count,
 		};
 	}
