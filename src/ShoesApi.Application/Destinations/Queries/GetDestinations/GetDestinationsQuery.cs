@@ -1,0 +1,10 @@
+using MediatR;
+
+namespace ShoesApi.Application.Destinations.Queries.GetDestinations;
+
+/// <summary>
+/// Запрос на получение коллекции Назначений обуви
+/// </summary>
+public class GetDestinationsQuery : IRequest<GetDestinationsResponse>
+{
+}
