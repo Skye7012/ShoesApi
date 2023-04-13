@@ -1,4 +1,5 @@
 using MediatR;
+using ShoesApi.Contracts.Requests.Destinations.GetDestinations;
 
 namespace ShoesApi.Application.Destinations.Queries.GetDestinations;
 

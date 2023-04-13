@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Application.Common.Interfaces;
-using ShoesApi.Application.Shoes.Queries.Common;
+using ShoesApi.Contracts.Requests.Shoes.Common;
 
 namespace ShoesApi.Application.Shoes.Queries.GetShoesByIds;
 

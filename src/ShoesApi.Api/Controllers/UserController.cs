@@ -6,6 +6,10 @@ using ShoesApi.Application.Users.Commands.PutUser;
 using ShoesApi.Application.Users.Commands.SignInUser;
 using ShoesApi.Application.Users.Commands.SignUpUser;
 using ShoesApi.Application.Users.Queries.GetUser;
+using ShoesApi.Contracts.Requests.Users.GetUser;
+using ShoesApi.Contracts.Requests.Users.PutUser;
+using ShoesApi.Contracts.Requests.Users.SignInUser;
+using ShoesApi.Contracts.Requests.Users.SignUpUser;
 
 namespace ShoesApi.Api.Controllers;
 
@@ -47,11 +51,20 @@ public class UserController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status201Created)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public async Task<ActionResult<SignUpUserResponse>> SignUpAsync(
-		SignUpUserCommand request,
+		SignUpUserRequest request,
 		CancellationToken cancellationToken)
 			=> CreatedAtAction(
 				nameof(GetAsync),
-				await _mediator.Send(request, cancellationToken));
+				await _mediator.Send(
+					new SignUpUserCommand
+					{
+						Login = request.Login,
+						Name = request.Name,
+						Password = request.Password,
+						Surname = request.Surname,
+						Phone = request.Phone,
+					},
+					cancellationToken));
 
 	/// <summary>
 	/// Авторизоваться
@@ -64,9 +77,15 @@ public class UserController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<SignInUserResponse> SignInAsync(
-		SignInUserCommand request,
+		SignInUserRequest request,
 		CancellationToken cancellationToken)
-		=> await _mediator.Send(request, cancellationToken);
+		=> await _mediator.Send(
+			new SignInUserCommand
+			{
+				Login = request.Login,
+				Password = request.Password,
+			},
+			cancellationToken);
 
 	/// <summary>
 	/// Обновить данные о пользователе
@@ -78,9 +97,16 @@ public class UserController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task PutAsync(
-		PutUserCommand request,
+		PutUserRequest request,
 		CancellationToken cancellationToken)
-		=> await _mediator.Send(request, cancellationToken);
+		=> await _mediator.Send(
+			new PutUserCommand
+			{
+				Name = request.Name,
+				Phone = request.Phone,
+				Surname = request.Surname,
+			},
+			cancellationToken);
 
 	/// <summary>
 	/// Удалить пользователя

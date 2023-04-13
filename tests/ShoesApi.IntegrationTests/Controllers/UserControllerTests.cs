@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Api.Controllers;
-using ShoesApi.Application.Users.Commands.PutUser;
-using ShoesApi.Application.Users.Commands.SignInUser;
-using ShoesApi.Application.Users.Commands.SignUpUser;
-using ShoesApi.Application.Users.Queries.GetUser;
+using ShoesApi.Contracts.Requests.Users.GetUser;
+using ShoesApi.Contracts.Requests.Users.PutUser;
+using ShoesApi.Contracts.Requests.Users.SignInUser;
+using ShoesApi.Contracts.Requests.Users.SignUpUser;
 using ShoesApi.Infrastructure.Persistence;
 using Xunit;
 
@@ -53,14 +53,15 @@ public class UserControllerTests : IntegrationTestsBase
 	[Fact]
 	public async Task SignUpAsync_ShouldCreateUser_WhenRequestValid()
 	{
-		var signUpResponse = await Client.PostAsJsonAsync("/User/SignUp", new SignUpUserCommand
-		{
-			Login = "Login",
-			Password = "Password",
-			Name = "Name",
-			Surname = "Surname",
-			Phone = "88005553535",
-		})
+		var signUpResponse = await Client
+			.PostAsJsonAsync("/User/SignUp", new SignUpUserRequest
+			{
+				Login = "Login",
+				Password = "Password",
+				Name = "Name",
+				Surname = "Surname",
+				Phone = "88005553535",
+			})
 			.GetResponseAsyncAs<SignUpUserResponse>();
 
 		signUpResponse.Should().NotBeNull();
@@ -83,11 +84,12 @@ public class UserControllerTests : IntegrationTestsBase
 	[Fact]
 	public async Task SignInAsync_ShouldCreateValidToken_WhenRequestValid()
 	{
-		var signInResponse = await Client.PostAsJsonAsync("/User/SignIn", new SignInUserCommand
-		{
-			Login = Seeder.AdminUser.Login,
-			Password = "AdminPassword",
-		})
+		var signInResponse = await Client
+			.PostAsJsonAsync("/User/SignIn", new SignInUserRequest
+			{
+				Login = Seeder.AdminUser.Login,
+				Password = "AdminPassword",
+			})
 			.GetResponseAsyncAs<SignInUserResponse>();
 
 		signInResponse.Should().NotBeNull();
@@ -111,7 +113,7 @@ public class UserControllerTests : IntegrationTestsBase
 	public async Task PutAsync_ShouldUpdateUser_WhenRequestValid()
 	{
 		Authenticate();
-		var putResponse = await Client.PutAsJsonAsync("/User", new PutUserCommand
+		var putResponse = await Client.PutAsJsonAsync("/User", new PutUserRequest
 		{
 			Name = "Name2",
 			Surname = "Surname2",

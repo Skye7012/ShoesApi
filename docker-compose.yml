@@ -1,0 +1,72 @@
+version: '3.4'
+
+networks:
+  shoesapi-back-network:
+    driver: bridge 
+  shoesapi-front-network:
+    driver: bridge 
+
+services:
+  shoesapi.api:
+    container_name: shoesapi.api
+    image: ${DOCKER_REGISTRY-}shoesapiapi
+    build:
+      context: .
+      dockerfile: src/ShoesApi.Api/Dockerfile
+    ports:
+      - 5000:80
+    environment:
+      - AppSettings__AllowedOrigin=http://localhost:8081
+      - ConnectionStrings__ShoesDb=Host=shoesapi.db;Port=5432;Database=postgres;Username=postgres;Password=example
+      - ConnectionStrings__S3=s3://MINIO_ROOT_USER_EXAMPLE:MINIO_ROOT_PASSWORD_EXAMPLE@shoesapi.minio:9000
+    depends_on:
+      - shoesapi.db
+      - shoesapi.minio
+    networks:
+      - shoesapi-back-network
+      - shoesapi-front-network
+    restart: on-failure
+
+  shoesapi.client:
+    container_name: shoesapi.client
+    image: skye7012/shoes-front
+    ports:
+      - 8081:8080
+    environment:
+      - VUE_APP_BASE_URL=http://localhost:5000
+      - VUE_APP_TOKEN=token
+      - VUE_APP_BASKET_NAME=basket
+    networks:
+      - shoesapi-front-network
+    depends_on:
+      - shoesapi.api
+    restart: on-failure
+
+  shoesapi.db:
+    container_name: shoesapi.db
+    image: postgres:14
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: example
+    networks:
+      - shoesapi-back-network
+    volumes:
+      - ..\ShoesApi.Volumes\Postgres:/var/lib/postgresql/data
+    restart: on-failure
+
+  shoesapi.minio:
+    container_name: shoesapi.minio
+    image: minio/minio
+    ports:
+      - 9002:9000
+      - 9003:9001
+    command: server /data --console-address ":9001"
+    volumes:
+      - ..\ShoesApi.Volumes\Minio:/data
+    environment:
+      MINIO_ROOT_USER: MINIO_ROOT_USER_EXAMPLE
+      MINIO_ROOT_PASSWORD: MINIO_ROOT_PASSWORD_EXAMPLE
+    networks:
+      - shoesapi-back-network
+    restart: on-failure

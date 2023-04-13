@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ShoesApi.Application.Seasons.Queries.GetSeasons;
+using ShoesApi.Contracts.Requests.Seasons.GetSeasons;
 
 namespace ShoesApi.Api.Controllers;
 

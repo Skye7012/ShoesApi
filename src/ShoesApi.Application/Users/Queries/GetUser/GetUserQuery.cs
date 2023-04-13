@@ -1,4 +1,5 @@
 using MediatR;
+using ShoesApi.Contracts.Requests.Users.GetUser;
 
 namespace ShoesApi.Application.Users.Queries.GetUser;
 

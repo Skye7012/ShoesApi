@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Application.Common.Interfaces;
+using ShoesApi.Contracts.Requests.Seasons.GetSeasons;
 
 namespace ShoesApi.Application.Seasons.Queries.GetSeasons;
 

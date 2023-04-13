@@ -1,5 +1,5 @@
 using System.Linq.Dynamic.Core;
-using ShoesApi.Application.Common.Models;
+using ShoesApi.Contracts.Requests.Common;
 
 namespace ShoesApi.Application.Common.Extensions;
 
@@ -15,7 +15,7 @@ public static class QueryableExtension
 	/// <param name="request">Фильтры для запроса</param>
 	public static IQueryable<T> Sort<T>(
 		this IQueryable<T> source,
-		BaseGetQuery request)
+		BaseGetRequest request)
 	{
 		if (source == null)
 			throw new ArgumentNullException(nameof(source));

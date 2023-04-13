@@ -1,4 +1,5 @@
 using MediatR;
+using ShoesApi.Contracts.Requests.Orders.GetOrders;
 
 namespace ShoesApi.Application.Orders.Queries.GetOrders;
 
