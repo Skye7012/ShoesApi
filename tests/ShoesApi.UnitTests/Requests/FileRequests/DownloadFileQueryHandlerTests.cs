@@ -15,7 +15,7 @@ namespace ShoesApi.UnitTests.Requests.FileRequests;
 public class DownloadFileQueryHandlerTests : UnitTestBase
 {
 	/// <summary>
-	/// Должен вернуть скачать файл, если он существует в БД
+	/// Должен скачать файл, если он существует в БД
 	/// </summary>
 	[Fact]
 	public async Task DownloadFileQueryHandler_ShouldDownloadFile_WhenFileExists()

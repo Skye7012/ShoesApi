@@ -65,6 +65,7 @@ public static class ServicesConfigurator
 				IncludeProjectXmlComments(options, typeof(Program).Assembly);
 				IncludeProjectXmlComments(options, typeof(ApplicationServicesConfigurator).Assembly);
 				IncludeProjectXmlComments(options, typeof(Domain.Common.EntityBase).Assembly);
+				IncludeProjectXmlComments(options, typeof(Contracts.Requests.Common.BaseGetRequest).Assembly);
 			});
 
 	/// <summary>

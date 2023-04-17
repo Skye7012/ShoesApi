@@ -1,13 +1,13 @@
 using MediatR;
-using ShoesApi.Application.Common.Models;
-using ShoesApi.Application.Shoes.Queries.Common;
+using ShoesApi.Contracts.Requests.Common;
+using ShoesApi.Contracts.Requests.Shoes.Common;
 
 namespace ShoesApi.Application.Shoes.Queries.GetShoesByIds;
 
 /// <summary>
 /// Запрос на получение списка обуви по коллекции идентификаторов
 /// </summary>
-public class GetShoesByIdsQuery : BaseGetQuery, IRequest<GetShoesResponse>
+public class GetShoesByIdsQuery : BaseGetRequest, IRequest<GetShoesResponse>
 {
 	/// <summary>
 	/// Конструктор

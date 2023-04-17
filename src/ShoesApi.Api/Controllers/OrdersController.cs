@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShoesApi.Application.Orders.Commands.PostOrder;
 using ShoesApi.Application.Orders.Queries.GetOrders;
+using ShoesApi.Contracts.Requests.Orders.GetOrders;
+using ShoesApi.Contracts.Requests.Orders.PostOrder;
 
 namespace ShoesApi.Api.Controllers;
 
@@ -35,7 +37,7 @@ public class OrdersController : ControllerBase
 	/// <summary>
 	/// Создать заказ
 	/// </summary>
-	/// <param name="command">Команда</param>
+	/// <param name="request">Запрос</param>
 	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns>Идентификатор созданного заказа</returns>
 	[HttpPost]
@@ -44,10 +46,16 @@ public class OrdersController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<int>> PostAsync(
-		PostOrderCommand command,
+		PostOrderRequest request,
 		CancellationToken cancellationToken)
 	{
-		var orderId = await _mediator.Send(command, cancellationToken);
+		var orderId = await _mediator.Send(
+			new PostOrderCommand
+			{
+				Address = request.Address,
+				OrderItems = request.OrderItems,
+			},
+			cancellationToken);
 
 		return CreatedAtAction(nameof(GetAsync), orderId);
 	}

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Api.Controllers;
-using ShoesApi.Application.Orders.Commands.PostOrder;
-using ShoesApi.Application.Orders.Queries.GetOrders;
+using ShoesApi.Contracts.Requests.Orders.GetOrders;
+using ShoesApi.Contracts.Requests.Orders.PostOrder;
 using ShoesApi.Domain.Entities;
 using ShoesApi.Infrastructure.Persistence;
 using Xunit;
@@ -117,24 +117,24 @@ public class OrdersControllerTests : IntegrationTestsBase
 		Authenticate();
 
 		var createOrderId = await Client
-			.PostAsJsonAsync("/Orders", new PostOrderCommand
-			{
-				Address = "г. Москва, ул. Пушкина, дом Колотушкина",
-				OrderItems = new List<PostOrderCommandOrderItem>
+			.PostAsJsonAsync("/Orders", new PostOrderRequest
 				{
-					new PostOrderCommandOrderItem
+					Address = "г. Москва, ул. Пушкина, дом Колотушкина",
+					OrderItems = new List<PostOrderRequestOrderItem>
 					{
-						RuSize = sizes[0].RuSize,
-						ShoeId = shoes[0].Id,
-					},
-					new PostOrderCommandOrderItem
-					{
-						RuSize = sizes[1].RuSize,
-						ShoeId = shoes[1].Id,
+						new PostOrderRequestOrderItem
+						{
+							RuSize = sizes[0].RuSize,
+							ShoeId = shoes[0].Id,
+						},
+						new PostOrderRequestOrderItem
+						{
+							RuSize = sizes[1].RuSize,
+							ShoeId = shoes[1].Id,
+						}
 					}
-				}
-			})
-				.GetResponseAsyncAs<int>();
+				})
+			.GetResponseAsyncAs<int>();
 
 		var createdOrder = await DbContext.Orders
 			.Include(x => x.OrderItems)

@@ -29,6 +29,8 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
 	{
 		var login = _userService.GetLogin();
 		var user = await _context.Users
+			.Include(x => x.Orders!)
+				.ThenInclude(x => x.OrderItems)
 			.FirstOrDefaultAsync(x => x.Login == login, cancellationToken)
 			?? throw new UserNotFoundException(login);
 

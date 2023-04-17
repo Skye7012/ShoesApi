@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ShoesApi.Application.Brands.Queries.GetBrands;
+using ShoesApi.Contracts.Requests.Brands.GetBrands;
 
 namespace ShoesApi.Api.Controllers;
 

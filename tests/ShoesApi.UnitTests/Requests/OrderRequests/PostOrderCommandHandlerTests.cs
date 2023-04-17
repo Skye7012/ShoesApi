@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Application.Common.Exceptions;
 using ShoesApi.Application.Orders.Commands.PostOrder;
+using ShoesApi.Contracts.Requests.Orders.PostOrder;
 using ShoesApi.Domain.Entities;
 using ShoesApi.Domain.Entities.ShoeSimpleFilters;
 using Xunit;
@@ -68,14 +69,14 @@ public class PostOrderCommandHandlerTests : UnitTestBase
 			c.SaveChanges();
 		});
 
-		var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+		var orderItemsToCreate = new List<PostOrderRequestOrderItem>
 		{
-			new PostOrderCommandOrderItem
+			new PostOrderRequestOrderItem
 			{
 				ShoeId = _shoes[0].Id,
 				RuSize = _sizes[0].RuSize,
 			},
-			new PostOrderCommandOrderItem
+			new PostOrderRequestOrderItem
 			{
 				ShoeId = _shoes[1].Id,
 				RuSize = _sizes[1].RuSize,
@@ -149,14 +150,14 @@ public class PostOrderCommandHandlerTests : UnitTestBase
 			c.SaveChanges();
 		});
 
-		var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+		var orderItemsToCreate = new List<PostOrderRequestOrderItem>
 		{
-			new PostOrderCommandOrderItem
+			new PostOrderRequestOrderItem
 			{
 				ShoeId = _shoes[0].Id,
 				RuSize = _sizes[0].RuSize,
 			},
-			new PostOrderCommandOrderItem
+			new PostOrderRequestOrderItem
 			{
 				ShoeId = _shoes[0].Id,
 				RuSize = _sizes[0].RuSize,
@@ -189,9 +190,9 @@ public class PostOrderCommandHandlerTests : UnitTestBase
 			c.SaveChanges();
 		});
 
-		var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+		var orderItemsToCreate = new List<PostOrderRequestOrderItem>
 		{
-			new PostOrderCommandOrderItem
+			new PostOrderRequestOrderItem
 			{
 				ShoeId = 404,
 				RuSize = _sizes[0].RuSize,
@@ -224,9 +225,9 @@ public class PostOrderCommandHandlerTests : UnitTestBase
 			c.SaveChanges();
 		});
 
-		var orderItemsToCreate = new List<PostOrderCommandOrderItem>
+		var orderItemsToCreate = new List<PostOrderRequestOrderItem>
 		{
-			new PostOrderCommandOrderItem
+			new PostOrderRequestOrderItem
 			{
 				ShoeId = _shoes[0].Id,
 				RuSize = 404,
