@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShoesApi.Contracts\ShoesApi.Contracts.csproj" />
     <ProjectReference Include="..\ShoesApi.Domain\ShoesApi.Domain.csproj" />
   </ItemGroup>
 

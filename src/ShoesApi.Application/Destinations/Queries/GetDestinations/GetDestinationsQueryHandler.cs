@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Application.Common.Interfaces;
+using ShoesApi.Contracts.Requests.Destinations.GetDestinations;
 
 namespace ShoesApi.Application.Destinations.Queries.GetDestinations;
 

@@ -1,6 +1,7 @@
 using MediatR;
 using ShoesApi.Application.Common.Exceptions;
 using ShoesApi.Application.Common.Interfaces;
+using ShoesApi.Contracts.Requests.Users.SignUpUser;
 using ShoesApi.Domain.Entities;
 
 namespace ShoesApi.Application.Users.Commands.SignUpUser;

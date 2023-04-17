@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoesApi.Application.Common.Exceptions;
 using ShoesApi.Application.Common.Interfaces;
+using ShoesApi.Contracts.Requests.Users.GetUser;
 
 namespace ShoesApi.Application.Users.Queries.GetUser;
 
