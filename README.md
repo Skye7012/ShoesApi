@@ -11,7 +11,7 @@
       height="40">
   <img src="https://img.shields.io/static/v1?label=&message=Entity-Framework&style=flat-square&color=blueviolet"
       height="40">
-  <img src="https://img.shields.io/static/v1?label=&message=PosgreSql&style=flat-square&color=1A5276"
+  <img src="https://img.shields.io/static/v1?label=&message=PostgreSql&style=flat-square&color=1A5276"
       height="40">
   <img src="https://img.shields.io/static/v1?label=&message=MediatR&style=flat-square&color=blue"
       height="40">
@@ -50,7 +50,7 @@ API задокументирован с помощью `Swagger`
 Для хранения изображений обуви используется [`MinIo`](https://min.io/)  
 Аутентификация реализована через [`JWT`](https://jwt.io/) токены  
 Есть модульные и интеграционные тесты  
-Тесты написаны с помощью `xUnit` и [`FluentAsserions`](https://github.com/fluentassertions/fluentassertions)  
+Тесты написаны с помощью `xUnit` и [`FluentAssertions`](https://github.com/fluentassertions/fluentassertions)  
 Интеграционные тесты реализованы с помощью [`testcontainters`](https://github.com/testcontainers/testcontainers-dotnet) (и [`respawn`](https://github.com/jbogard/Respawn)) (поэтому нужен докер для их прогонки)  
 
 <br>
@@ -101,7 +101,3 @@ Volumes для БД и MinIO создадутся на уровень выше �
   - [**[deprecated]** ~~API на django rest framework~~](https://github.com/Skye7012/shoes-django-api)
   
   - [**[deprecated]** ~~API на php slim framework~~](https://github.com/Skye7012/shoes-api-slim)
-
-
-
-
