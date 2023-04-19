@@ -22,12 +22,15 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/Skye7012/ShoesApi/issues">
-    <img src="https://img.shields.io/github/issues-raw/Skye7012/ShoesApi" alt="Open Issues"/>
-  </a>
-  <a href="https://github.com/Skye7012/ShoesApi/issues?q=is%3Aissue+is%3Aclosed">
-    <img src="https://img.shields.io/github/issues-closed-raw/Skye7012/ShoesApi" alt="Closed Issues"/>
-  </a>
+    <a href="https://github.com/Skye7012/ShoesApi/issues">
+        <img src="https://img.shields.io/github/issues-raw/Skye7012/ShoesApi" alt="Open Issues"/>
+    </a>
+    <a href="https://github.com/Skye7012/ShoesApi/issues?q=is%3Aissue+is%3Aclosed">
+        <img src="https://img.shields.io/github/issues-closed-raw/Skye7012/ShoesApi" alt="Closed Issues"/>
+    </a>
+    <a href="https://github.com/users/Skye7012/projects/3">
+        <img src="https://img.shields.io/badge/ShoesProject-gray?logo=github" alt="ShoesProject"/>
+    </a>
 </div>
 
 <br>
