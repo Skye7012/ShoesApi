@@ -7,17 +7,19 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/static/v1?label=&message=c%23&style=flat-square&color=0000ff"
+      height="40">
   <img src="https://img.shields.io/badge/ASP.NET-purple?style=flat-square"
       height="40">
   <img src="https://img.shields.io/static/v1?label=&message=Entity-Framework&style=flat-square&color=blueviolet"
       height="40">
-  <img src="https://img.shields.io/static/v1?label=&message=PostgreSql&style=flat-square&color=1A5276"
+  <img src="https://img.shields.io/static/v1?label=&message=Swagger&style=flat-square&color=green&logo=swagger&logoColor=white"
+      height="40">
+  <img src="https://img.shields.io/static/v1?label=&message=PostgreSql&style=flat-square&color=1A5276&logo=postgresql&logoColor=white"
       height="40">
   <img src="https://img.shields.io/static/v1?label=&message=MediatR&style=flat-square&color=blue"
       height="40">
   <img src="https://img.shields.io/static/v1?label=&message=JWT&style=flat-square&color=BDB76B"
-      height="40">
-   <img src="https://img.shields.io/static/v1?label=&message=MinIo&style=flat-square&color=FF0000"
       height="40">
 </p>
 
