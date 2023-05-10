@@ -39,10 +39,10 @@
 
 # Table Of Contents
 
-* [Общее описание](#общее-описание)
-* [Бизнес-логика](#бизнес-логика)
-* [Локальный запуск](#локальный-запуск)
-* [Related repositories](#related-repositories)
+- [Общее описание](#общее-описание)
+- [Бизнес-логика](#бизнес-логика)
+- [Локальный запуск](#локальный-запуск)
+- [Related repositories](#related-repositories)
 
 
 
@@ -52,7 +52,7 @@ API для проекта Интернет-магазин обуви на `ASP.N
 API задокументирован с помощью `Swagger`  
 Проект структурирован по принципам `clean architecture`  
 Реализован `CQRS` с помощью [`MediatR`](https://github.com/jbogard/MediatR)  
-В качестве ORM используется `Entity Framework`, в качестве БД `PostgreSql`  
+В качестве ORM используется `Entity Framework`, в качестве СУБД `PostgreSql`  
 Для хранения изображений обуви используется [`MinIo`](https://min.io/)  
 Аутентификация реализована через [`JWT`](https://jwt.io/) токены  
   
