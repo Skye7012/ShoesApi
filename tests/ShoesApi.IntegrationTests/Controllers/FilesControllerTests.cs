@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using ShoesApi.Api.Controllers;
 using ShoesApi.Infrastructure.Persistence;
+using ShoesApi.IntegrationTests.Extensions;
 using Xunit;
 using File = ShoesApi.Domain.Entities.File;
 

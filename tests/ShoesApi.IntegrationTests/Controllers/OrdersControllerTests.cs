@@ -9,6 +9,7 @@ using ShoesApi.Contracts.Requests.Orders.GetOrders;
 using ShoesApi.Contracts.Requests.Orders.PostOrder;
 using ShoesApi.Domain.Entities;
 using ShoesApi.Infrastructure.Persistence;
+using ShoesApi.IntegrationTests.Extensions;
 using Xunit;
 
 namespace ShoesApi.IntegrationTests.Controllers;

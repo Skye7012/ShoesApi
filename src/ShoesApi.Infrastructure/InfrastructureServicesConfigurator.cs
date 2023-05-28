@@ -46,7 +46,8 @@ public static class InfrastructureServicesConfigurator
 					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
 						.GetBytes(configurationManager.GetSection("AppSettings:Token").Value!)),
 					ValidateIssuer = false,
-					ValidateAudience = false
+					ValidateAudience = false,
+					ValidateLifetime = true,
 				});
 		return services;
 	}

@@ -15,8 +15,6 @@ public class ValidationException : ApplicationExceptionBase
 	public ValidationException(string message) : base(message)
 	{ }
 
-	/// <summary>
-	/// Код состояния
-	/// </summary>
+	/// <inheritdoc/>
 	public override HttpStatusCode StatusCode => HttpStatusCode.BadRequest;
 }

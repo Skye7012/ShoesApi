@@ -13,6 +13,7 @@ using ShoesApi.Contracts.Requests.Shoes.PostShoe;
 using ShoesApi.Contracts.Requests.Shoes.PutShoe;
 using ShoesApi.Domain.Entities;
 using ShoesApi.Infrastructure.Persistence;
+using ShoesApi.IntegrationTests.Extensions;
 using Xunit;
 
 namespace ShoesApi.IntegrationTests.Controllers;

@@ -11,14 +11,14 @@ public interface IUserService
 	/// Получить логин по клейму в токене
 	/// </summary>
 	/// <returns>Логин</returns>
-	public string GetLogin();
+	string GetLogin();
 
 	/// <summary>
 	/// Создать токен авторизации
 	/// </summary>
 	/// <param name="user">Пользователь, для которого создается токен</param>
 	/// <returns>Токен авторизации</returns>
-	public string CreateToken(User user);
+	string CreateToken(User user);
 
 	/// <summary>
 	/// Создать хэш пароля
@@ -26,7 +26,7 @@ public interface IUserService
 	/// <param name="password">Пароль</param>
 	/// <param name="passwordHash">Итоговый захэшированный пароль</param>
 	/// <param name="passwordSalt">Соль захэшированного пароля</param>
-	public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
+	void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
 
 	/// <summary>
 	/// Проверить валидность пароля
@@ -35,5 +35,5 @@ public interface IUserService
 	/// <param name="passwordHash">Хэш пароля</param>
 	/// <param name="passwordSalt">Соль пароля</param>
 	/// <returns>Валиден ли пароль</returns>
-	public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
+	bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
 }

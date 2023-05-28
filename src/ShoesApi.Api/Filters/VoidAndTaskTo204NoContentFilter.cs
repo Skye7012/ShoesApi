@@ -12,6 +12,9 @@ public class VoidAndTaskTo204NoContentFilter : IResultFilter
 	/// <inheritdoc/>
 	public void OnResultExecuted(ResultExecutedContext context)
 	{
+		if (!context.ModelState.IsValid)
+			return;
+
 		if (context.ActionDescriptor is ControllerActionDescriptor actionDescriptor)
 		{
 			var returnType = actionDescriptor.MethodInfo.ReturnType;

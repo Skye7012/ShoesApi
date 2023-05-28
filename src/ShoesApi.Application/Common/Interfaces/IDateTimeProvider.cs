@@ -8,5 +8,5 @@ public interface IDateTimeProvider
 	/// <summary>
 	/// Мокируемый <see cref="DateTime.UtcNow"/>
 	/// </summary>
-	public DateTime UtcNow { get; }
+	DateTime UtcNow { get; }
 }

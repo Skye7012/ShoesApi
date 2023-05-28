@@ -2,7 +2,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ShoesApi.IntegrationTests;
+namespace ShoesApi.IntegrationTests.Extensions;
 
 /// <summary>
 /// Расширения для <see cref="IServiceCollection"/>

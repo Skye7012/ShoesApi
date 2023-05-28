@@ -1,6 +1,8 @@
 namespace ShoesApi.Application.Common.Interfaces;
 
-/// <inheritdoc/>
+/// <summary>
+/// Сервис для работы с S3 хранилищем
+/// </summary>
 public interface IS3Service
 {
 	/// <summary>
@@ -10,7 +12,7 @@ public interface IS3Service
 	/// <param name="fileName">Наименование файла</param>
 	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns></returns>
-	public Task UploadAsync(
+	Task UploadAsync(
 		Stream stream,
 		string fileName,
 		CancellationToken cancellationToken);
@@ -21,7 +23,7 @@ public interface IS3Service
 	/// <param name="fileName">Наименование файла</param>
 	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns></returns>
-	public Task<Stream> DownloadAsync(
+	Task<Stream> DownloadAsync(
 		string fileName,
 		CancellationToken cancellationToken);
 
@@ -31,5 +33,5 @@ public interface IS3Service
 	/// </summary>
 	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns>Существовал ли бакет</returns>
-	public Task<bool> InitializeStorageAsync(CancellationToken cancellationToken);
+	Task<bool> InitializeStorageAsync(CancellationToken cancellationToken);
 }

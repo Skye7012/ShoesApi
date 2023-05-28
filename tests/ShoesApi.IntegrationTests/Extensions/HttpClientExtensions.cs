@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ShoesApi.IntegrationTests;
+namespace ShoesApi.IntegrationTests.Extensions;
 
 /// <summary>
 /// Расширения для <see cref="HttpClient"/>

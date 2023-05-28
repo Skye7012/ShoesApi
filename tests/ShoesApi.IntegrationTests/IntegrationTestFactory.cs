@@ -13,6 +13,7 @@ using Minio.AspNetCore;
 using Npgsql;
 using NSubstitute;
 using ShoesApi.Application.Common.Interfaces;
+using ShoesApi.IntegrationTests.Extensions;
 using Testcontainers.Minio;
 using Testcontainers.PostgreSql;
 using Xunit;

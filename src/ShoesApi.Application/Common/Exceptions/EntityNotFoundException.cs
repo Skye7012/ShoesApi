@@ -25,8 +25,6 @@ public class EntityNotFoundException<TEntity> : ApplicationExceptionBase
 		: base($"Не удалось найти сущность '{typeof(TEntity).Name}' по id = '{id}'")
 	{ }
 
-	/// <summary>
-	/// Код состояния
-	/// </summary>
+	/// <inheritdoc/>
 	public override HttpStatusCode StatusCode => HttpStatusCode.NotFound;
 }

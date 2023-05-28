@@ -13,6 +13,7 @@ using ShoesApi.Contracts.Requests.Users.PutUser;
 using ShoesApi.Contracts.Requests.Users.SignInUser;
 using ShoesApi.Contracts.Requests.Users.SignUpUser;
 using ShoesApi.Infrastructure.Persistence;
+using ShoesApi.IntegrationTests.Extensions;
 using Xunit;
 
 namespace ShoesApi.IntegrationTests.Controllers;
@@ -102,8 +103,6 @@ public class UserControllerTests : IntegrationTestsBase
 			.Value;
 
 		nameClaimValue.Should().Be(Seeder.AdminUser.Login);
-
-		Authenticate(signInResponse.Token);
 	}
 
 	/// <summary>

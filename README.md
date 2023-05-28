@@ -39,6 +39,7 @@
 
 # Table Of Contents
 
+- [Table Of Contents](#table-of-contents)
 - [Общее описание](#общее-описание)
 - [Бизнес-логика](#бизнес-логика)
 - [Локальный запуск](#локальный-запуск)
@@ -93,7 +94,7 @@ API задокументирован с помощью `Swagger`
 
 - **Фронт**: [http://localhost:8081](http://localhost:8081)
 
-- **MinIo**: [http://localhost:9003/login](http://localhost:9003/login)
+- **MinIO**: [http://localhost:9003/login](http://localhost:9003/login)
 
 Volumes для БД и MinIO создадутся на уровень выше корневой директории  
 Для того, чтобы полноценно пользоваться фронтом, нужно создать обувь через API [(см. бизнес-логика)](#бизнес-логика)

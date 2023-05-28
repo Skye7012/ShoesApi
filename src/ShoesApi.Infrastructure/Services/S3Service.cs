@@ -4,7 +4,9 @@ using ShoesApi.Application.Common.Interfaces;
 
 namespace ShoesApi.Infrastructure.Services;
 
-/// <inheritdoc/>
+/// <summary>
+/// Сервис для работы с S3 хранилищем
+/// </summary>
 public class S3Service : IS3Service
 {
 	/// <summary>
