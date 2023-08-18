@@ -7,12 +7,14 @@
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>shoesapi.api</DockerServiceName>
+    <DockerComposeBaseFilePath>docker-compose-configs/docker-compose</DockerComposeBaseFilePath>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
+    <None Include="docker-compose-configs/docker-compose.override.yml">
+      <DependentUpon>docker-compose-configs/docker-compose.yml</DependentUpon>
     </None>
-    <None Include="docker-compose.yml" />
+    <None Include="docker-compose-configs/docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="docker-compose-configs\git-worktree-skip.docker-compose.override.cmd" />
   </ItemGroup>
 </Project>

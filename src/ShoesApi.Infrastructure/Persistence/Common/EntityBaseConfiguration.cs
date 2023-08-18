@@ -18,7 +18,7 @@ public abstract class EntityBaseConfiguration<TEntity> : IEntityTypeConfiguratio
 	}
 
 	/// <summary>
-	/// Скофигурировать базовые поля из <see cref="EntityBase"/>
+	/// Сконфигурировать базовые поля из <see cref="EntityBase"/>
 	/// </summary>
 	/// <param name="builder">Билдер</param>
 	private static void ConfigureBase(EntityTypeBuilder<TEntity> builder)

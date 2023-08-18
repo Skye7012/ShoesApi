@@ -12,7 +12,7 @@ services:
     image: ${DOCKER_REGISTRY-}shoesapiapi
     build:
       context: .
-      dockerfile: src/ShoesApi.Api/Dockerfile
+      dockerfile: ../src/ShoesApi.Api/Dockerfile
     ports:
       - 5000:80
     environment:
@@ -52,7 +52,7 @@ services:
     networks:
       - shoesapi-back-network
     volumes:
-      - ..\ShoesApi.Volumes\Postgres:/var/lib/postgresql/data
+      - ..\..\ShoesApi.Volumes\Postgres:/var/lib/postgresql/data
     restart: on-failure
 
   shoesapi.minio:
@@ -63,7 +63,7 @@ services:
       - 9003:9001
     command: server /data --console-address ":9001"
     volumes:
-      - ..\ShoesApi.Volumes\Minio:/data
+      - ..\..\ShoesApi.Volumes\Minio:/data
     environment:
       MINIO_ROOT_USER: MINIO_ROOT_USER_EXAMPLE
       MINIO_ROOT_PASSWORD: MINIO_ROOT_PASSWORD_EXAMPLE
