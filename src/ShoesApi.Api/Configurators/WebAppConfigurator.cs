@@ -44,7 +44,8 @@ public static class WebAppConfigurator
 		app.UseCors(
 		options =>
 			options
-				.WithOrigins(allowedOrigin)
+				//.WithOrigins(allowedOrigin)
+				.AllowAnyOrigin()
 				.AllowAnyMethod()
 				.AllowAnyHeader()
 				.WithExposedHeaders(HeaderNames.ContentDisposition));
